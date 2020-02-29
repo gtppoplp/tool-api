@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxlirong.tool.mapper.ToolRbacResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxlirong.tool.entity.ToolRbacResourceEntity">
+        <id column="resource_id" property="resourceId" />
+        <result column="domain" property="domain" />
+        <result column="parent_resource_id" property="parentResourceId" />
+        <result column="url" property="url" />
+        <result column="is_menu" property="isMenu" />
+        <result column="order" property="order" />
+        <result column="source_code" property="sourceCode" />
+        <result column="source_name" property="sourceName" />
+        <result column="source_explain" property="sourceExplain" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        domain, resource_id, parent_resource_id, url, is_menu, order, source_code, source_name, source_explain
+    </sql>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="false" scanPeriod="1 seconds">
+    <contextName>logback</contextName>
+
+    <!--定义参数-->
+    <property name="app.name" value="logback_test"/>
+    <property name="scheduler.manager.server.home" value="./logs"/>
+
+    <!--控制台配置-->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <!--定义控制台输出格式-->
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} [%file : %line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--滚动配置-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--定义日志输出的路径-->
+        <file>${scheduler.manager.server.home}/${app.name}.log</file>
+        <!--定义日志滚动的策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--定义文件滚动时的文件名的格式-->
+            <fileNamePattern>${scheduler.manager.server.home}/${app.name}.%d{yyyy-MM-dd.HH}.log.gz
+            </fileNamePattern>
+            <maxHistory>90</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <!--定义输出格式-->
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} [%file : %line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--设置附加器-->
+    <root level="trace">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="file"/>
+    </root>
+
+    <logger name="com.example.logback" level="warn"/>
+</configuration>

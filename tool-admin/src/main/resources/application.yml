@@ -1,0 +1,23 @@
+spring:
+  http:
+    encoding:
+      #设置响应为utf-8
+      force-response: true
+  profiles:
+    #选择启动的配置文件
+    active: dev
+
+mybatis-plus:
+  # 扫描 mapper.xml
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: id_worker #设置为全局唯一id
+#      logic-delete-value: 1 # 逻辑已删除值(不支持null)
+#      logic-not-delete-value: 0 # 逻辑未删除值
+
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: mySecret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24)
+  tokenHead: Bearer  #JWT负载中拿到开头
