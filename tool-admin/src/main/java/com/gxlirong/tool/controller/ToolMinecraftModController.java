@@ -1,19 +1,11 @@
 package com.gxlirong.tool.controller;
 
-
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author lirong
- * @since 2020-02-29
- */
+@Api(tags = "游戏-我的世界-模组")
 @RestController
-@RequestMapping("/security/organization")
-public class ToolRbacOrganizationController {
-
+@RequestMapping("/minecraft/mod")
+public class ToolMinecraftModController {
 }

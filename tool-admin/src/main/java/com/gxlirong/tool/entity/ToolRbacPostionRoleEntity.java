@@ -18,7 +18,6 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-
 @TableName("tool_rbac_postion_role")
 @ApiModel(value = "ToolRbacPostionRoleEntity对象", description = "")
 public class ToolRbacPostionRoleEntity implements Serializable {

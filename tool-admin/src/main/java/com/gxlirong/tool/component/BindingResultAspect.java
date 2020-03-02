@@ -24,6 +24,8 @@ public class BindingResultAspect {
     }
 
     /**
+     * 控制器异常切面
+     *
      * @param joinPoint ProceedingJoinPoint
      * @return Object
      * @throws Throwable Throwable

@@ -29,11 +29,12 @@ import java.util.List;
 
 /**
  * SpringSecurity的配置
- * Created by macro on 2018/4/26.
+ *
+ * @author lirong
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ToolRbacUserService adminService;
@@ -62,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/springfox-swagger-ui/**"
                 )
                 .permitAll()
-                .antMatchers("/admin/login", "/admin/register")// 对登录注册要允许匿名访问
+                .antMatchers("/security/account/login")// 对登录注册要允许匿名访问
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS)//跨域请求会先进行一次options请求
                 .permitAll()
@@ -95,17 +96,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
         return username -> {
-            ToolRbacUserEntity rbacUser = adminService.getAdminByUsername(username);
+            ToolRbacUserEntity rbacUser = adminService.getUserByUsername(username);
             if (rbacUser != null) {
-                List<ToolRbacResourceEntity> permissionList = adminService.getPermissionList(rbacUser.getUpdatedId());
-                return new ToolRbacUserDetails(rbacUser,permissionList);
+                List<ToolRbacResourceEntity> permissionList = adminService.getPermissionList(rbacUser.getUserId());
+                return new ToolRbacUserDetails(rbacUser, permissionList);
             }
             throw new UsernameNotFoundException("用户名或密码错误");
         };
     }
 
     @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter();
     }
 

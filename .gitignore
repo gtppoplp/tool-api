@@ -1,5 +1,7 @@
 # Maven #
 target/
+temp/
+log/
 
 # IDEA #
 .idea/

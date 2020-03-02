@@ -12,16 +12,31 @@ import java.util.List;
  * </p>
  *
  * @author lirong
- * @since 2020-02-29
  */
 public interface ToolRbacUserService extends IService<ToolRbacUserEntity> {
     /**
-     * 根据用户名获取后台管理员
+     * 登录功能
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 生成的JWT的token
+     * @author lirong
      */
-    ToolRbacUserEntity getAdminByUsername(String username);
+    String login(String username, String password);
+
+    /**
+     * 根据用户名获取后台管理员
+     *
+     * @param username 用户名
+     * @author lirong
+     */
+    ToolRbacUserEntity getUserByUsername(String username);
 
     /**
      * 获取用户所有权限（包括角色权限和+-权限）
+     *
+     * @param userId 用户名
+     * @author lirong
      */
-    List<ToolRbacResourceEntity> getPermissionList(Long adminId);
+    List<ToolRbacResourceEntity> getPermissionList(Long userId);
 }

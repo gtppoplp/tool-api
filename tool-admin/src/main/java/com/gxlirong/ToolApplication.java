@@ -8,6 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.gxlirong.tool.mapper")
 public class ToolApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ToolApplication.class);
+        SpringApplication.run(ToolApplication.class, args);
     }
 }

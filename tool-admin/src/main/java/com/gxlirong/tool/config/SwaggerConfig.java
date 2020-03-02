@@ -40,7 +40,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.plksys.mes.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.gxlirong.tool.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(pars);
@@ -54,8 +54,8 @@ public class SwaggerConfig {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("demo后台系统")
-                .description("demo后台模块")
+                .title("tool后台系统")
+                .description("tool后台模块")
                 .version("1.0")
                 .build();
     }

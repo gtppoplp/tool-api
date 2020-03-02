@@ -33,6 +33,22 @@ public class ToolRbacUserDetails implements UserDetails {
                 .collect(Collectors.toList());
     }
 
+    public Integer getDomain() {
+        return umsAdmin.getDomain();
+    }
+
+    public Long getDepartmentId() {
+        return umsAdmin.getDepartmentId();
+    }
+
+    public Long getOrganizationId() {
+        return umsAdmin.getOrganizationId();
+    }
+
+    public Long getUserId() {
+        return umsAdmin.getUserId();
+    }
+
     @Override
     public String getPassword() {
         return umsAdmin.getPassword();
