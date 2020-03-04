@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gxlirong.tool.common.api.ResultCode;
+import com.gxlirong.tool.common.exception.OperationException;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModTypePostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModTypeQueryParam;
 import com.gxlirong.tool.entity.ToolMinecraftModTypeEntity;
@@ -34,11 +36,21 @@ public class ToolMinecraftModTypeServiceImpl extends ServiceImpl<ToolMinecraftMo
                 new Page<>(minecraftModTypeQueryParam.getCurrent(), minecraftModTypeQueryParam.getSize()),
                 new QueryWrapper<ToolMinecraftModTypeEntity>()
                         .like(minecraftModTypeQueryParam.getTypeName() != null, "type_name", minecraftModTypeQueryParam.getTypeName())
-                        .orderByDesc("created_at"));
+                        .eq("is_deleted", false)
+                        .orderByDesc("created_time"));
     }
 
     @Override
     public boolean create(ToolMinecraftModTypePostParam minecraftModTypePostParam) {
+        if (this.count(
+                new QueryWrapper<ToolMinecraftModTypeEntity>()
+                        .eq("domain", userUtil.getUser().getDomain())
+                        .eq("organization_id", userUtil.getUser().getOrganizationId())
+                        .eq("type_name", minecraftModTypePostParam.getTypeName())
+                        .eq("is_deleted", false)
+        ) != 0) {
+            throw new OperationException(ResultCode.MINECRAFT_MOD_TYPE_CREATE_NAME_REPEAT);
+        }
         ToolMinecraftModTypeEntity minecraftModTypeEntity = new ToolMinecraftModTypeEntity();
         BeanUtil.copyProperties(minecraftModTypePostParam, minecraftModTypeEntity);
         userUtil.insertBefore(minecraftModTypeEntity);
@@ -52,6 +64,19 @@ public class ToolMinecraftModTypeServiceImpl extends ServiceImpl<ToolMinecraftMo
                         .eq("type_id", id)
                         .eq("is_deleted", false)
         );
+        if (minecraftModTypeEntity == null) {
+            throw new OperationException(ResultCode.MINECRAFT_MOD_TYPE_UPDATE_ENTITY_NONE);
+        }
+        if (this.count(
+                new QueryWrapper<ToolMinecraftModTypeEntity>()
+                        .ne("type_id", minecraftModTypeEntity.getTypeId())
+                        .eq("domain", userUtil.getUser().getDomain())
+                        .eq("organization_id", userUtil.getUser().getOrganizationId())
+                        .eq("type_name", minecraftModTypePostParam.getTypeName())
+                        .eq("is_deleted", false)
+        ) != 0) {
+            throw new OperationException(ResultCode.MINECRAFT_MOD_TYPE_UPDATE_NAME_REPEAT);
+        }
         BeanUtil.copyProperties(minecraftModTypePostParam, minecraftModTypeEntity);
         userUtil.updateBefore(minecraftModTypeEntity);
         return this.updateById(minecraftModTypeEntity);

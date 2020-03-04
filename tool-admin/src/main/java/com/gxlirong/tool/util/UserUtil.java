@@ -21,8 +21,8 @@ public class UserUtil {
      *
      * @return Authentication
      */
-    public UserDetails getUser() {
-        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ToolRbacUserDetails getUser() {
+        return (ToolRbacUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     /**
@@ -31,7 +31,7 @@ public class UserUtil {
      * @author lirong
      */
     public void insertBefore(BaseUserEntity examples) {
-        ToolRbacUserDetails user = (ToolRbacUserDetails) getUser();
+        ToolRbacUserDetails user = getUser();
         examples.setCreatedId(user.getUserId());
         examples.setCreatedTime(LocalDateTime.now());
         examples.setOrganizationId(user.getOrganizationId());

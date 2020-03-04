@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 public class OperationException extends RuntimeException {
-    private long code;
+    private int code;
     private String message;
 
     public OperationException(int code, String message) {

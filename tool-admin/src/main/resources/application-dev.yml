@@ -27,11 +27,11 @@ spring:
 
   redis:
     # 服务器IP地址
-    host: 127.0.0.1
+    host: www.gxlirong.com
     # 连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    #password:
+    password: 67af138483b0fac3a10ea3abe445e91978b41effd37dc51ebc71a50325f0d50a
     # 使用库
     database: 1
 file:

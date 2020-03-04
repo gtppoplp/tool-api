@@ -6,7 +6,7 @@ package com.gxlirong.tool.common.api;
  * @author lirong
  */
 public interface IErrorCode {
-    long getCode();
+    int getCode();
 
     String getMessage();
 }
