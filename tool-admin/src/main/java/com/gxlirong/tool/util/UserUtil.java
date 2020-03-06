@@ -1,9 +1,8 @@
 package com.gxlirong.tool.util;
 
 import com.gxlirong.tool.domain.bo.ToolRbacUserDetails;
-import com.gxlirong.tool.entity.BaseUserEntity;
+import com.gxlirong.tool.entity.BaseUser;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -30,7 +29,7 @@ public class UserUtil {
      *
      * @author lirong
      */
-    public void insertBefore(BaseUserEntity examples) {
+    public void insertBefore(BaseUser examples) {
         ToolRbacUserDetails user = getUser();
         examples.setCreatedId(user.getUserId());
         examples.setCreatedTime(LocalDateTime.now());
@@ -44,8 +43,8 @@ public class UserUtil {
      *
      * @author lirong
      */
-    public void updateBefore(BaseUserEntity examples) {
-        ToolRbacUserDetails user = (ToolRbacUserDetails) getUser();
+    public void updateBefore(BaseUser examples) {
+        ToolRbacUserDetails user = getUser();
         examples.setUpdatedId(user.getUserId());
         examples.setUpdatedTime(LocalDateTime.now());
     }
@@ -55,8 +54,8 @@ public class UserUtil {
      *
      * @author lirong
      */
-    public void deleteBefore(BaseUserEntity examples) {
-        ToolRbacUserDetails user = (ToolRbacUserDetails) getUser();
+    public void deleteBefore(BaseUser examples) {
+        ToolRbacUserDetails user = getUser();
         examples.setDeletedId(user.getUserId());
         examples.setDeletedTime(LocalDateTime.now());
     }

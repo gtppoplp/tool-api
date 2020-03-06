@@ -1,7 +1,7 @@
 package com.gxlirong.tool.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gxlirong.tool.entity.ToolRbacRoleResourceEntity;
+import com.gxlirong.tool.entity.ToolRbacRoleResource;
 import com.gxlirong.tool.mapper.ToolRbacRoleResourceMapper;
 import com.gxlirong.tool.service.ToolRbacRoleResourceService;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-02-29
  */
 @Service
-public class ToolRbacRoleResourceServiceImpl extends ServiceImpl<ToolRbacRoleResourceMapper, ToolRbacRoleResourceEntity> implements ToolRbacRoleResourceService {
+public class ToolRbacRoleResourceServiceImpl extends ServiceImpl<ToolRbacRoleResourceMapper, ToolRbacRoleResource> implements ToolRbacRoleResourceService {
 
 }

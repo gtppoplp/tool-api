@@ -1,7 +1,7 @@
 package com.gxlirong.tool.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gxlirong.tool.entity.ToolRbacDepartmentEntity;
+import com.gxlirong.tool.entity.ToolRbacDepartment;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.gxlirong.tool.entity.ToolRbacDepartmentEntity;
  * @author lirong
  * @since 2020-02-29
  */
-public interface ToolRbacDepartmentMapper extends BaseMapper<ToolRbacDepartmentEntity> {
+public interface ToolRbacDepartmentMapper extends BaseMapper<ToolRbacDepartment> {
 
 }

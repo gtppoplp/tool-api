@@ -52,16 +52,17 @@ public class MybatisGenerator {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/tool-mbg/src/main/java");
         gc.setAuthor("lirong");
+        gc.setFileOverride(true);              // 是否覆盖同名文件，默认是false
         gc.setOpen(false);
-        gc.setSwagger2(true);					//开启 swagger2 模式 默认false
-        gc.setBaseColumnList(true);				//开启 baseColumnList 默认false
-        gc.setBaseResultMap(true);				//开启 BaseResultMap 默认false
-        gc.setEntityName("%sEntity");//实体命名方式  默认值：null 例如：%sEntity 生成 UserEntity
-        gc.setMapperName("%sMapper");			//mapper 命名方式 默认值：null 例如：%sDao 生成 UserDao
-        gc.setXmlName("%sMapper");				//Mapper xml 命名方式   默认值：null 例如：%sDao 生成 UserDao.xml
-        gc.setServiceName("%sService");			//service 命名方式   默认值：null 例如：%sBusiness 生成 UserBusiness
-        gc.setServiceImplName("%sServiceImpl");	//service impl 命名方式  默认值：null 例如：%sBusinessImpl 生成 UserBusinessImpl
-        gc.setControllerName("%sController");	//controller 命名方式    默认值：null 例如：%sAction 生成 UserAction
+        gc.setSwagger2(true);                    //开启 swagger2 模式 默认false
+        gc.setBaseColumnList(false);                //开启 baseColumnList 默认false
+        gc.setBaseResultMap(true);                //开启 BaseResultMap 默认false
+        gc.setEntityName(null);//实体命名方式  默认值：null 例如：%sEntity 生成 UserEntity
+//        gc.setMapperName("%sDao");            //mapper 命名方式 默认值：null 例如：%sDao 生成 UserDao
+//        gc.setXmlName("%sDao");                //Mapper xml 命名方式   默认值：null 例如：%sDao 生成 UserDao.xml
+//        gc.setServiceName("%sService");            //service 命名方式   默认值：null 例如：%sBusiness 生成 UserBusiness
+//        gc.setServiceImplName("%sServiceImpl");    //service impl 命名方式  默认值：null 例如：%sBusinessImpl 生成 UserBusinessImpl
+//        gc.setControllerName("%sController");    //controller 命名方式    默认值：null 例如：%sAction 生成 UserAction
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -103,16 +104,42 @@ public class MybatisGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //这里设置的实体会自动继承到生成的实体
-//        strategy.setSuperEntityClass("com.baomidou.mybatisplus.samples.generator.common.BaseEntity");
+        strategy.setSuperEntityClass("com.gxlirong.tool.entity.BaseUser");
         strategy.setEntityLombokModel(true);
-        strategy.setRestControllerStyle(true);	//生成 @RestController 控制器
+        strategy.setRestControllerStyle(true);    //生成 @RestController 控制器
         //这里设置的控制器会自动继承到生成的控制器
 //        strategy.setSuperControllerClass("com.baomidou.mybatisplus.samples.generator.common.BaseController");
-        strategy.setInclude(scanner("表名"));
-        strategy.setSuperEntityColumns("id");
+//        strategy.setInclude(scanner("表名"));
+        strategy.setSuperEntityColumns("domain",
+                "department_id",
+                "organization_id",
+                "created_id",
+                "created_time",
+                "updated_id",
+                "updated_time",
+                "deleted_id",
+                "deleted_time",
+                "is_deleted");
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
         mpg.setStrategy(strategy);
+        strategy.setInclude(
+                "tool_minecraft_mod",
+                "tool_minecraft_mod_category",
+                "tool_rbac_department",
+                "tool_rbac_department_postion",
+                "tool_rbac_department_role",
+                "tool_rbac_organization",
+                "tool_rbac_organization_role",
+                "tool_rbac_postion",
+                "tool_rbac_postion_role",
+                "tool_rbac_resource",
+                "tool_rbac_role",
+                "tool_rbac_role_resource",
+                "tool_rbac_user",
+                "tool_rbac_user_postion",
+                "tool_rbac_user_role"
+        ); // 需要生成的表
         // 选择 freemarker 引擎需要指定如下加，注意 pom 依赖必须有！
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();

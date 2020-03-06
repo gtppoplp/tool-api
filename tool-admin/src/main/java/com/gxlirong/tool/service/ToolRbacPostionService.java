@@ -1,7 +1,7 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gxlirong.tool.entity.ToolRbacPostionEntity;
+import com.gxlirong.tool.entity.ToolRbacPostion;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.gxlirong.tool.entity.ToolRbacPostionEntity;
  * @author lirong
  * @since 2020-02-29
  */
-public interface ToolRbacPostionService extends IService<ToolRbacPostionEntity> {
+public interface ToolRbacPostionService extends IService<ToolRbacPostion> {
 
 }

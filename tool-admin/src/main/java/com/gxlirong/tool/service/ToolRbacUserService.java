@@ -1,8 +1,8 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gxlirong.tool.entity.ToolRbacResourceEntity;
-import com.gxlirong.tool.entity.ToolRbacUserEntity;
+import com.gxlirong.tool.entity.ToolRbacResource;
+import com.gxlirong.tool.entity.ToolRbacUser;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author lirong
  */
-public interface ToolRbacUserService extends IService<ToolRbacUserEntity> {
+public interface ToolRbacUserService extends IService<ToolRbacUser> {
     /**
      * 登录功能
      *
@@ -30,7 +30,7 @@ public interface ToolRbacUserService extends IService<ToolRbacUserEntity> {
      * @param username 用户名
      * @author lirong
      */
-    ToolRbacUserEntity getUserByUsername(String username);
+    ToolRbacUser getUserByUsername(String username);
 
     /**
      * 获取用户所有权限（包括角色权限和+-权限）
@@ -38,5 +38,5 @@ public interface ToolRbacUserService extends IService<ToolRbacUserEntity> {
      * @param userId 用户名
      * @author lirong
      */
-    List<ToolRbacResourceEntity> getPermissionList(Long userId);
+    List<ToolRbacResource> getPermissionList(Long userId);
 }

@@ -1,7 +1,7 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gxlirong.tool.entity.ToolRbacDepartmentEntity;
+import com.gxlirong.tool.entity.ToolRbacDepartment;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.gxlirong.tool.entity.ToolRbacDepartmentEntity;
  * @author lirong
  * @since 2020-02-29
  */
-public interface ToolRbacDepartmentService extends IService<ToolRbacDepartmentEntity> {
+public interface ToolRbacDepartmentService extends IService<ToolRbacDepartment> {
 
 }

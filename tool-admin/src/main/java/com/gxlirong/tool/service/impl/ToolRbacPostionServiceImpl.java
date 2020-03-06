@@ -1,7 +1,7 @@
 package com.gxlirong.tool.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gxlirong.tool.entity.ToolRbacPostionEntity;
+import com.gxlirong.tool.entity.ToolRbacPostion;
 import com.gxlirong.tool.mapper.ToolRbacPostionMapper;
 import com.gxlirong.tool.service.ToolRbacPostionService;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-02-29
  */
 @Service
-public class ToolRbacPostionServiceImpl extends ServiceImpl<ToolRbacPostionMapper, ToolRbacPostionEntity> implements ToolRbacPostionService {
+public class ToolRbacPostionServiceImpl extends ServiceImpl<ToolRbacPostionMapper, ToolRbacPostion> implements ToolRbacPostionService {
 
 }

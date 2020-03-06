@@ -1,8 +1,8 @@
 package com.gxlirong.tool.service.impl;
 
-import com.gxlirong.tool.entity.ToolRbacResourceEntity;
+import com.gxlirong.tool.entity.ToolRbacResource;
 import com.gxlirong.tool.mapper.ToolRbacResourceMapper;
-import com.gxlirong.tool.service.ToolRbacResourceService;
+import com.gxlirong.tool.service.IToolRbacResourceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author lirong
- * @since 2020-02-29
+ * @since 2020-03-06
  */
 @Service
-public class ToolRbacResourceServiceImpl extends ServiceImpl<ToolRbacResourceMapper, ToolRbacResourceEntity> implements ToolRbacResourceService {
+public class ToolRbacResourceServiceImpl extends ServiceImpl<ToolRbacResourceMapper, ToolRbacResource> implements IToolRbacResourceService {
 
 }

@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author lirong
- * @since 2020-03-01
+ * @since 2020-03-06
  */
 @RestController
-@RequestMapping("/tool-minecraft-mod-entity")
+@RequestMapping("/tool-minecraft-mod")
 public class ToolMinecraftModController {
 
 }

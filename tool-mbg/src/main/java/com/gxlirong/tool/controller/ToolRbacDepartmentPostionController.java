@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author lirong
- * @since 2020-02-29
+ * @since 2020-03-06
  */
 @RestController
-@RequestMapping("/tool-rbac-department-postion-entity")
+@RequestMapping("/tool-rbac-department-postion")
 public class ToolRbacDepartmentPostionController {
 
 }

@@ -1,7 +1,7 @@
 package com.gxlirong.tool.domain.bo;
 
-import com.gxlirong.tool.entity.ToolRbacResourceEntity;
-import com.gxlirong.tool.entity.ToolRbacUserEntity;
+import com.gxlirong.tool.entity.ToolRbacResource;
+import com.gxlirong.tool.entity.ToolRbacUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
  * @author lirong
  */
 public class ToolRbacUserDetails implements UserDetails {
-    private ToolRbacUserEntity umsAdmin;
-    private List<ToolRbacResourceEntity> permissionList;
+    private ToolRbacUser umsAdmin;
+    private List<ToolRbacResource> permissionList;
 
-    public ToolRbacUserDetails(ToolRbacUserEntity umsAdmin, List<ToolRbacResourceEntity> permissionList) {
+    public ToolRbacUserDetails(ToolRbacUser umsAdmin, List<ToolRbacResource> permissionList) {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
     }
@@ -46,7 +46,7 @@ public class ToolRbacUserDetails implements UserDetails {
     }
 
     public Long getUserId() {
-        return umsAdmin.getUserId();
+        return umsAdmin.getId();
     }
 
     @Override

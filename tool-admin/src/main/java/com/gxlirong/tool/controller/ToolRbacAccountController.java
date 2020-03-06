@@ -4,7 +4,7 @@ import com.gxlirong.tool.common.api.CommonResult;
 import com.gxlirong.tool.domain.dto.ToolRbacUserLoginPostParam;
 import com.gxlirong.tool.domain.vo.ToolRbacUserInfoVo;
 import com.gxlirong.tool.domain.vo.ToolRbacUserLoginVo;
-import com.gxlirong.tool.entity.ToolRbacUserEntity;
+import com.gxlirong.tool.entity.ToolRbacUser;
 import com.gxlirong.tool.service.ToolRbacUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,9 +43,9 @@ public class ToolRbacAccountController {
     @ResponseBody
     public CommonResult<ToolRbacUserInfoVo> getUserInfo(Principal principal) {
         String username = principal.getName();
-        ToolRbacUserEntity rbacUserEntity = rbacUserService.getUserByUsername(username);
+        ToolRbacUser rbacUser = rbacUserService.getUserByUsername(username);
         ToolRbacUserInfoVo toolRbacUserInfoVo = new ToolRbacUserInfoVo();
-        toolRbacUserInfoVo.setUsername(rbacUserEntity.getUsername());
+        toolRbacUserInfoVo.setUsername(rbacUser.getUsername());
         toolRbacUserInfoVo.setRoleList(new String[]{"TEST"});
         toolRbacUserInfoVo.setIcon("");
         return CommonResult.success(toolRbacUserInfoVo);

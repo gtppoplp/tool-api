@@ -1,8 +1,8 @@
 package com.gxlirong.tool.service.impl;
 
-import com.gxlirong.tool.entity.ToolMinecraftModEntity;
+import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.mapper.ToolMinecraftModMapper;
-import com.gxlirong.tool.service.ToolMinecraftModService;
+import com.gxlirong.tool.service.IToolMinecraftModService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author lirong
- * @since 2020-03-01
+ * @since 2020-03-06
  */
 @Service
-public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMapper, ToolMinecraftModEntity> implements ToolMinecraftModService {
+public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMapper, ToolMinecraftMod> implements IToolMinecraftModService {
 
 }

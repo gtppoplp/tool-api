@@ -1,7 +1,7 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gxlirong.tool.entity.ToolMinecraftModEntity;
+import com.gxlirong.tool.entity.ToolMinecraftMod;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.gxlirong.tool.entity.ToolMinecraftModEntity;
  * @author lirong
  * @since 2020-03-01
  */
-public interface ToolMinecraftModService extends IService<ToolMinecraftModEntity> {
+public interface ToolMinecraftModService extends IService<ToolMinecraftMod> {
 
 }

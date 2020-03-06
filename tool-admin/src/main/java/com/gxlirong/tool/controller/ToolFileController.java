@@ -5,6 +5,7 @@ import com.gxlirong.tool.common.api.CommonResult;
 import com.gxlirong.tool.config.FileUploadConfig;
 import com.gxlirong.tool.domain.vo.ToolFileUploadVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ public class ToolFileController {
     @Autowired
     private FileUploadConfig fileUploadConfig;
 
+    @ApiOperation("上传")
     @PostMapping("/upload")
     @ResponseBody
     public CommonResult<ToolFileUploadVo> fileUpload(@RequestParam("file") MultipartFile file) {

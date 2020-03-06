@@ -1,6 +1,6 @@
 package com.gxlirong.tool.mapper;
 
-import com.gxlirong.tool.entity.ToolMinecraftModEntity;
+import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author lirong
- * @since 2020-03-01
+ * @since 2020-03-06
  */
-public interface ToolMinecraftModMapper extends BaseMapper<ToolMinecraftModEntity> {
+public interface ToolMinecraftModMapper extends BaseMapper<ToolMinecraftMod> {
 
 }

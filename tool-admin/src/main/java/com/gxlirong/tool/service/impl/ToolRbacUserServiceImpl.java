@@ -3,8 +3,8 @@ package com.gxlirong.tool.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.additional.query.impl.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gxlirong.tool.entity.ToolRbacResourceEntity;
-import com.gxlirong.tool.entity.ToolRbacUserEntity;
+import com.gxlirong.tool.entity.ToolRbacResource;
+import com.gxlirong.tool.entity.ToolRbacUser;
 import com.gxlirong.tool.mapper.ToolRbacUserMapper;
 import com.gxlirong.tool.service.ToolRbacUserService;
 import com.gxlirong.tool.util.JwtTokenUtil;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ToolRbacUserServiceImpl extends ServiceImpl<ToolRbacUserMapper, ToolRbacUserEntity> implements ToolRbacUserService {
+public class ToolRbacUserServiceImpl extends ServiceImpl<ToolRbacUserMapper, ToolRbacUser> implements ToolRbacUserService {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -61,19 +61,19 @@ public class ToolRbacUserServiceImpl extends ServiceImpl<ToolRbacUserMapper, Too
     }
 
     @Override
-    public ToolRbacUserEntity getUserByUsername(String username) {
+    public ToolRbacUser getUserByUsername(String username) {
         return this.getOne(
-                new QueryWrapper<ToolRbacUserEntity>()
+                new QueryWrapper<ToolRbacUser>()
                         .eq("username", username)
                         .eq("is_deleted", false)
         );
     }
 
     @Override
-    public List<ToolRbacResourceEntity> getPermissionList(Long userId) {
-        ArrayList<ToolRbacResourceEntity> toolRbacResourceEntities = new ArrayList<>();
-        ToolRbacResourceEntity toolRbacResourceEntity = new ToolRbacResourceEntity();
-        toolRbacResourceEntities.add(toolRbacResourceEntity);
+    public List<ToolRbacResource> getPermissionList(Long userId) {
+        ArrayList<ToolRbacResource> toolRbacResourceEntities = new ArrayList<>();
+        ToolRbacResource toolRbacResource = new ToolRbacResource();
+        toolRbacResourceEntities.add(toolRbacResource);
         return toolRbacResourceEntities;
     }
 }

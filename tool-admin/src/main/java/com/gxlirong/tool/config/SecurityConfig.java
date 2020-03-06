@@ -4,8 +4,8 @@ import com.gxlirong.tool.component.JwtAuthenticationTokenFilter;
 import com.gxlirong.tool.component.RestAuthenticationEntryPoint;
 import com.gxlirong.tool.component.RestfulAccessDeniedHandler;
 import com.gxlirong.tool.domain.bo.ToolRbacUserDetails;
-import com.gxlirong.tool.entity.ToolRbacResourceEntity;
-import com.gxlirong.tool.entity.ToolRbacUserEntity;
+import com.gxlirong.tool.entity.ToolRbacResource;
+import com.gxlirong.tool.entity.ToolRbacUser;
 import com.gxlirong.tool.service.ToolRbacUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -96,9 +96,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
         return username -> {
-            ToolRbacUserEntity rbacUser = adminService.getUserByUsername(username);
+            ToolRbacUser rbacUser = adminService.getUserByUsername(username);
             if (rbacUser != null) {
-                List<ToolRbacResourceEntity> permissionList = adminService.getPermissionList(rbacUser.getUserId());
+                List<ToolRbacResource> permissionList = adminService.getPermissionList(rbacUser.getId());
                 return new ToolRbacUserDetails(rbacUser, permissionList);
             }
             throw new UsernameNotFoundException("用户名或密码错误");

@@ -1,7 +1,7 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gxlirong.tool.entity.ToolRbacOrganizationRoleEntity;
+import com.gxlirong.tool.entity.ToolRbacOrganizationRole;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.gxlirong.tool.entity.ToolRbacOrganizationRoleEntity;
  * @author lirong
  * @since 2020-02-29
  */
-public interface ToolRbacOrganizationRoleService extends IService<ToolRbacOrganizationRoleEntity> {
+public interface ToolRbacOrganizationRoleService extends IService<ToolRbacOrganizationRole> {
 
 }
