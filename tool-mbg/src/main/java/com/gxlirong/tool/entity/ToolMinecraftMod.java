@@ -9,16 +9,16 @@ package com.gxlirong.tool.entity;
 
 /**
 * <p>
-    * 我的世界模组
+    * 我的世界模组表
     * </p>
 *
 * @author lirong
-* @since 2020-03-06
+* @since 2020-03-07
 */
     @Data
         @EqualsAndHashCode(callSuper = true)
     @Accessors(chain = true)
-    @ApiModel(value="ToolMinecraftMod对象", description="我的世界模组")
+    @ApiModel(value="ToolMinecraftMod对象", description="我的世界模组表")
     public class ToolMinecraftMod extends BaseUser {
 
     private static final long serialVersionUID = 1L;
@@ -32,8 +32,11 @@ package com.gxlirong.tool.entity;
             @ApiModelProperty(value = "模组名称")
     private String name;
 
-            @ApiModelProperty(value = "模组说明")
+            @ApiModelProperty(value = "模型说明")
     private String description;
+
+            @ApiModelProperty(value = "是否汉化")
+    private Boolean isChinese;
 
 
 }

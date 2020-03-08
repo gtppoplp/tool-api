@@ -21,7 +21,7 @@ public class ToolRbacPostion extends BaseUser {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "岗位标识",dataType = "Long")
+    @ApiModelProperty(value = "岗位标识",dataType = "String")
     private Long id;
 
     @ApiModelProperty(value = "岗位名称",dataType = "String")

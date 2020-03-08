@@ -16,16 +16,15 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-
 @ApiModel(value = "ToolRbacResource对象", description = "资源表")
 public class ToolRbacResource extends BaseUser {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "资源标识", dataType = "Long")
+    @ApiModelProperty(value = "资源标识", dataType = "String")
     private Long id;
 
-    @ApiModelProperty(value = "上级资源标识", dataType = "Long")
+    @ApiModelProperty(value = "上级资源标识", dataType = "String")
     private Long parentId;
 
     @ApiModelProperty(value = "路由", dataType = "String")

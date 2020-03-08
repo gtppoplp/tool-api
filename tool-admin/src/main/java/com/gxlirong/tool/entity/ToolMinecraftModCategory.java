@@ -21,7 +21,7 @@ public class ToolMinecraftModCategory extends BaseUser {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "模组类型标识",dataType = "Long")
+    @ApiModelProperty(value = "模组类型标识",dataType = "String")
     private Long id;
 
     @ApiModelProperty(value = "模组类型名称",dataType = "String")

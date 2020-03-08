@@ -21,7 +21,7 @@ public class ToolRbacRole extends BaseUser {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "角色标识",dataType = "Long")
+    @ApiModelProperty(value = "角色标识",dataType = "String")
     private Long id;
 
     @ApiModelProperty(value = "角色名称",dataType = "String")

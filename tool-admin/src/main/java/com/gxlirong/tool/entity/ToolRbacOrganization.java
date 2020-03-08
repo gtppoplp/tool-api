@@ -21,7 +21,7 @@ public class ToolRbacOrganization extends BaseUser {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "组织标识", dataType = "Long")
+    @ApiModelProperty(value = "组织标识", dataType = "String")
     private Long id;
 
     @ApiModelProperty(value = "组织名称", dataType = "String")

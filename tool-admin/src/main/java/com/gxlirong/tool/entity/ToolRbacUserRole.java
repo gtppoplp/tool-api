@@ -20,10 +20,10 @@ public class ToolRbacUserRole {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "角色标识", dataType = "Long")
+    @ApiModelProperty(value = "角色标识", dataType = "String")
     private Long roleId;
 
-    @ApiModelProperty(value = "用户标识", dataType = "Long")
+    @ApiModelProperty(value = "用户标识", dataType = "String")
     private Long userId;
 
 

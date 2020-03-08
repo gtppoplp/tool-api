@@ -48,11 +48,6 @@ public class BindingResultAspect {
                 }
             }
         }
-
-        try {
-            return joinPoint.proceed();
-        } catch (OperationException e) {
-            return new CommonResult<OperationException>(e.getCode(), e.getMessage(), null);
-        }
+        return joinPoint.proceed();
     }
 }

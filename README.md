@@ -52,5 +52,3 @@ tool
 | logback              | 日志收集工具       
 | Lombok               | 简化对象封装工具   
 
-token
-BearereyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE1ODMxNTQ1MjIzNDQsImV4cCI6MTU4Mzc1OTMyMn0.qk5pHoytVWo5IxCpTImFvKQf4It_4UfVfdGaIaMqgTVFmQz4h5O2bCz-Byiq_d5gLCY_j8LZkfB2kGy_jjIttA

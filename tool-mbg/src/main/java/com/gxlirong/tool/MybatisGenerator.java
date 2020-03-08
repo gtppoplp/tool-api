@@ -124,21 +124,7 @@ public class MybatisGenerator {
         strategy.setTablePrefix(pc.getModuleName() + "_");
         mpg.setStrategy(strategy);
         strategy.setInclude(
-                "tool_minecraft_mod",
-                "tool_minecraft_mod_category",
-                "tool_rbac_department",
-                "tool_rbac_department_postion",
-                "tool_rbac_department_role",
-                "tool_rbac_organization",
-                "tool_rbac_organization_role",
-                "tool_rbac_postion",
-                "tool_rbac_postion_role",
-                "tool_rbac_resource",
-                "tool_rbac_role",
-                "tool_rbac_role_resource",
-                "tool_rbac_user",
-                "tool_rbac_user_postion",
-                "tool_rbac_user_role"
+                "tool_minecraft_mod"
         ); // 需要生成的表
         // 选择 freemarker 引擎需要指定如下加，注意 pom 依赖必须有！
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());

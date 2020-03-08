@@ -27,7 +27,7 @@ spring:
 
   redis:
     # 服务器IP地址
-    host: www.gxlirong.com
+    host: localhost
     # 连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
@@ -36,4 +36,5 @@ spring:
     database: 1
 file:
   upload:
-    file-path: C:/Users/Administrator/Desktop/gxlirong/tool.gxlirong.com/www/backend/temp/
+    file-temp-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/temp/
+    minecraft-file-path: D:/Game/我的世界服务器/1.12.2版本/mods/

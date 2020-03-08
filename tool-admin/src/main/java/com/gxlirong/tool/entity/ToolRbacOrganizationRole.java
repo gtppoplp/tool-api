@@ -20,9 +20,9 @@ public class ToolRbacOrganizationRole{
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "组织标识", dataType = "Long")
+    @ApiModelProperty(value = "组织标识", dataType = "String")
     private Long organizationId;
-    @ApiModelProperty(value = "角色标识",dataType = "Long")
+    @ApiModelProperty(value = "角色标识",dataType = "String")
     private Long roleId;
 
 

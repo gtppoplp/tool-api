@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 我的世界模组 服务实现类
+ * 我的世界模组表 服务实现类
  * </p>
  *
  * @author lirong
- * @since 2020-03-06
+ * @since 2020-03-07
  */
 @Service
 public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMapper, ToolMinecraftMod> implements IToolMinecraftModService {

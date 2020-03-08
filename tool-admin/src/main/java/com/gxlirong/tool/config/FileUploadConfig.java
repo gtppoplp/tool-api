@@ -15,5 +15,12 @@ import org.springframework.stereotype.Component;
 @Setter
 @ConfigurationProperties(prefix = "file.upload")
 public class FileUploadConfig {
-    private String filePath;
+    /**
+     * 文件临时位置
+     */
+    private String fileTempPath;
+    /**
+     * 我的世界mod文件夹位置
+     */
+    private String minecraftFilePath;
 }

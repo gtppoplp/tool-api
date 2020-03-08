@@ -34,3 +34,7 @@ spring:
     #password:
     # 使用库
     database: 1
+
+file:
+  upload:
+    file-temp-path: /usr/local/docker/www/temp

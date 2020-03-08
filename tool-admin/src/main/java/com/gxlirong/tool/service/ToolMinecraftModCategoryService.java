@@ -6,6 +6,8 @@ import com.gxlirong.tool.domain.dto.ToolMinecraftModCategoryPostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModCategoryQueryParam;
 import com.gxlirong.tool.entity.ToolMinecraftModCategory;
 
+import java.util.List;
+
 /**
  * <p>
  * 我的世界模组 服务类
@@ -24,4 +26,5 @@ public interface ToolMinecraftModCategoryService extends IService<ToolMinecraftM
 
     boolean delete(Long id);
 
+    List<ToolMinecraftModCategory> getAll();
 }

@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Api(tags = "组件功能-上传文件")
 @RestController
-@RequestMapping("/module/file")
+@RequestMapping("/component/file")
 public class ToolFileController {
     @Autowired
     private FileUploadConfig fileUploadConfig;
@@ -33,7 +33,7 @@ public class ToolFileController {
                 return CommonResult.failed("上传失败，请选择文件");
             }
             String saveFileName = IdWorker.getTimeId() + fileName.substring(fileName.lastIndexOf("."));
-            String path = fileUploadConfig.getFilePath() + saveFileName;
+            String path = fileUploadConfig.getFileTempPath() + saveFileName;
             File dest = new File(path);
             if (!dest.getParentFile().exists()) {
                 if (!dest.getParentFile().mkdir()) {
@@ -42,7 +42,7 @@ public class ToolFileController {
             }
             file.transferTo(dest);
             ToolFileUploadVo toolFileUploadVo = new ToolFileUploadVo();
-            toolFileUploadVo.setPath(path);
+            toolFileUploadVo.setPath(saveFileName);
             return CommonResult.success(toolFileUploadVo);
         } catch (IOException e) {
             return CommonResult.failed("上传失败" + e.getMessage());

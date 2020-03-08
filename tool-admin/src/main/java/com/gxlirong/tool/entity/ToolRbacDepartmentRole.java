@@ -20,7 +20,7 @@ public class ToolRbacDepartmentRole {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "部门标识", dataType = "Long")
+    @ApiModelProperty(value = "部门标识", dataType = "String")
     private Long departmentId;
 
     @ApiModelProperty(value = "角色标识", dataType = "String")

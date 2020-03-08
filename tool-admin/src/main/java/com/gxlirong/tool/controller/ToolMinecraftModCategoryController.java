@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = "游戏-我的世界-模组类型")
 @RestController
 @RequestMapping("/minecraft/mod-category")
@@ -25,6 +27,13 @@ public class ToolMinecraftModCategoryController {
     @ResponseBody
     public CommonResult<CommonPage<ToolMinecraftModCategory>> list(ToolMinecraftModCategoryQueryParam minecraftModTypeQueryParam) {
         return CommonResult.success(CommonPage.restPage(minecraftModTypeService.getList(minecraftModTypeQueryParam)));
+    }
+
+    @ApiOperation("所有列表")
+    @GetMapping("/all")
+    @ResponseBody
+    public CommonResult<List<ToolMinecraftModCategory>> all() {
+        return CommonResult.success(minecraftModTypeService.getAll());
     }
 
     @ApiOperation("新增")

@@ -14,14 +14,14 @@ public abstract class BaseUser {
     @ApiModelProperty(value = "域空间(0运营方,1企业)", dataType = "Integer")
     private Integer domain;
 
-    @ApiModelProperty(value = "部门标识", dataType = "Long")
+    @ApiModelProperty(value = "部门标识", dataType = "String")
     private Long departmentId;
 
-    @ApiModelProperty(value = "组织标识", dataType = "Long")
+    @ApiModelProperty(value = "组织标识", dataType = "String")
     private Long organizationId;
 
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建人标识", dataType = "Long")
+    @ApiModelProperty(value = "创建人标识", dataType = "String")
     private Long createdId;
 
     @TableField(fill = FieldFill.INSERT)
@@ -29,14 +29,14 @@ public abstract class BaseUser {
     private LocalDateTime createdTime;
 
     @TableField(fill = FieldFill.UPDATE)
-    @ApiModelProperty(value = "更新人标识", dataType = "Long")
+    @ApiModelProperty(value = "更新人标识", dataType = "String")
     private Long updatedId;
 
     @TableField(fill = FieldFill.UPDATE)
     @ApiModelProperty(value = "更新时间", dataType = "LocalDateTime")
     private LocalDateTime updatedTime;
 
-    @ApiModelProperty(value = "删除人标识", dataType = "Long")
+    @ApiModelProperty(value = "删除人标识", dataType = "String")
     private Long deletedId;
 
     @ApiModelProperty(value = "删除时间", dataType = "LocalDateTime")

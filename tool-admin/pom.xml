@@ -79,6 +79,18 @@
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
         </dependency>
+        <!-- zip压缩解压工具 -->
+        <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-zip</artifactId>
+            <version>1.14</version>
+        </dependency>
+        <!-- 汉化api -->
+        <dependency>
+            <groupId>io.fd.honeycomb</groupId>
+            <artifactId>translate-api</artifactId>
+            <version>1.19.04</version>
+        </dependency>
     </dependencies>
 
 </project>

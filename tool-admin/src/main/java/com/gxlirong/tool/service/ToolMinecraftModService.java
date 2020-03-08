@@ -1,6 +1,9 @@
 package com.gxlirong.tool.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gxlirong.tool.domain.dto.ToolMinecraftModPostParam;
+import com.gxlirong.tool.domain.dto.ToolMinecraftModQueryParam;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 
 /**
@@ -13,4 +16,11 @@ import com.gxlirong.tool.entity.ToolMinecraftMod;
  */
 public interface ToolMinecraftModService extends IService<ToolMinecraftMod> {
 
+    IPage<ToolMinecraftMod> getList(ToolMinecraftModQueryParam minecraftModTypeQueryParam);
+
+    boolean create(ToolMinecraftModPostParam minecraftModTypePostParam);
+
+    boolean delete(Long id);
+
+    boolean update(Long id, ToolMinecraftModPostParam minecraftModTypePostParam);
 }

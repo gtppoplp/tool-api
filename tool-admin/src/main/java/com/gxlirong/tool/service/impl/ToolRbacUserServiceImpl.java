@@ -1,13 +1,12 @@
 package com.gxlirong.tool.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.additional.query.impl.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gxlirong.tool.entity.ToolRbacResource;
 import com.gxlirong.tool.entity.ToolRbacUser;
 import com.gxlirong.tool.mapper.ToolRbacUserMapper;
 import com.gxlirong.tool.service.ToolRbacUserService;
-import com.gxlirong.tool.util.JwtTokenUtil;
+import com.gxlirong.tool.utils.JwtTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,7 +37,7 @@ public class ToolRbacUserServiceImpl extends ServiceImpl<ToolRbacUserMapper, Too
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtils jwtTokenUtils;
 
     @Override
     public String login(String username, String password) {
@@ -51,7 +50,7 @@ public class ToolRbacUserServiceImpl extends ServiceImpl<ToolRbacUserMapper, Too
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = jwtTokenUtil.generateToken(userDetails);
+            token = jwtTokenUtils.generateToken(userDetails);
 //            updateLoginTimeByUsername(username);
 //TODO 登录记录            insertLoginLog(username);
         } catch (AuthenticationException e) {

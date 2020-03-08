@@ -21,10 +21,10 @@ public class ToolMinecraftMod extends BaseUser {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "模组标识", dataType = "Long")
+    @ApiModelProperty(value = "模组标识", dataType = "String")
     private Long id;
 
-    @ApiModelProperty(value = "模组类型", dataType = "Long")
+    @ApiModelProperty(value = "模组类型", dataType = "String")
     private Long categoryId;
 
     @ApiModelProperty(value = "模组名称", dataType = "String")
@@ -33,5 +33,6 @@ public class ToolMinecraftMod extends BaseUser {
     @ApiModelProperty(value = "模组说明", dataType = "String")
     private String description;
 
-
+    @ApiModelProperty(value = "是否汉化", dataType = "Boolean")
+    private Boolean isChinese;
 }

@@ -13,13 +13,13 @@ import java.util.List;
 @Data
 public class CommonPage<T> {
     //当前页
-    private Long pageNum;
+    private Integer pageNum;
     //当前size
-    private Long pageSize;
+    private Integer pageSize;
     //总共页数
-    private Long totalPage;
+    private Integer totalPage;
     //总数
-    private Long total;
+    private Integer total;
     //列表数据
     private List<T> list;
 
@@ -28,10 +28,10 @@ public class CommonPage<T> {
      */
     public static <T> CommonPage<T> restPage(IPage<T> iPage) {
         CommonPage<T> result = new CommonPage<T>();
-        result.setTotalPage(iPage.getPages());
-        result.setPageNum(iPage.getCurrent());
-        result.setPageSize(iPage.getSize());
-        result.setTotal(iPage.getTotal());
+        result.setTotalPage(((Long) iPage.getPages()).intValue());
+        result.setPageNum(((Long) iPage.getCurrent()).intValue());
+        result.setPageSize(((Long) iPage.getSize()).intValue());
+        result.setTotal(((Long) iPage.getTotal()).intValue());
         result.setList(iPage.getRecords());
         return result;
     }
