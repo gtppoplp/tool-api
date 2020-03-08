@@ -1,7 +1,8 @@
 # Maven #
 target/
 temp/
-log/
+logs/
+file/
 
 # IDEA #
 .idea/
