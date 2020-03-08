@@ -5,8 +5,6 @@ import com.gxlirong.tool.common.api.CommonResult;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModPostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModQueryParam;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
-import com.gxlirong.tool.entity.ToolMinecraftModCategory;
-import com.gxlirong.tool.service.ToolMinecraftModCategoryService;
 import com.gxlirong.tool.service.ToolMinecraftModService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

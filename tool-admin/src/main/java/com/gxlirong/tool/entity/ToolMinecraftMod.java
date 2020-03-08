@@ -35,4 +35,7 @@ public class ToolMinecraftMod extends BaseUser {
 
     @ApiModelProperty(value = "是否汉化", dataType = "Boolean")
     private Boolean isChinese;
+
+    @ApiModelProperty(value = "是否应用到游戏", dataType = "Boolean")
+    private Boolean isEnabled;
 }

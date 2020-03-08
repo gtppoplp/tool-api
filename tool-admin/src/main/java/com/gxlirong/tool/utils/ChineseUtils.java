@@ -1,8 +1,18 @@
 package com.gxlirong.tool.utils;
 
 import com.gxlirong.tool.domain.dto.ChineseTranslate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 汉化工具包
@@ -11,10 +21,50 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class ChineseUtils {
+    @Autowired
+    private HttpUtils httpUtils;
 
-    public ChineseTranslate getChineseString(String english) {
-        return new RestTemplate().getForObject("http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i=" + english, ChineseTranslate.class);
+    private static final String TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";
+    private static final String appid = "20200308000394809";
+    private static final String securityKey = "U7NyBJbyqoQ6zpWZg2WK";
+    private static final Integer millis = 500;//等待时间0.5秒(因为百度翻译api个人限制为1秒)
+    private static final Integer max = 10;//最大重试次数
 
+    /**
+     * 获得汉化内容
+     *
+     * @param english 英文字符串
+     * @return 汉化响应实体
+     */
+    public ChineseTranslate getChineseString(String english) throws InterruptedException {
+        Map<String, String> params = new HashMap<>();
+        params.put("q", english);
+        params.put("from", "en");
+        params.put("to", "zh");
+        params.put("appid", appid);
+        // 随机数
+        String salt = String.valueOf(System.currentTimeMillis());
+        params.put("salt", salt);
+        // 签名
+        String src = appid + english + salt + securityKey; // 加密前的原文
+        params.put("sign", DigestUtils.md5DigestAsHex(src.getBytes()));
+        //设置url编码方式
+        RestTemplate restTemplate = new RestTemplate();
+        DefaultUriBuilderFactory uriFactory = new DefaultUriBuilderFactory();
+        uriFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+        restTemplate.setUriTemplateHandler(uriFactory);
+
+        ChineseTranslate chineseTranslate;
+        int max = ChineseUtils.max;
+        do {
+            Thread.sleep(millis);
+            chineseTranslate = restTemplate.getForObject(httpUtils.getUrlWithQueryString(TRANS_API_HOST, params), ChineseTranslate.class);
+            if (max == 0) {
+                throw new RuntimeException();
+            }
+            max--;
+        } while (chineseTranslate == null || chineseTranslate.getFrom() == null);
+        return chineseTranslate;
     }
 
     /**

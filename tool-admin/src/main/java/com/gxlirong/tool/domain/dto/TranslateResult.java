@@ -9,5 +9,5 @@ public class TranslateResult {
     @ApiModelProperty("翻以前")
     private String src;
     @ApiModelProperty("翻译后")
-    private String tgt;
+    private String dst;
 }

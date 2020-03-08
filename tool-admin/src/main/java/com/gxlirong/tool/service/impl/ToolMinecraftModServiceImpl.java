@@ -80,14 +80,14 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
         ToolMinecraftMod minecraftMod = new ToolMinecraftMod();
         BeanUtil.copyProperties(minecraftModTypePostParam, minecraftMod);
         userUtils.insertBefore(minecraftMod);
-        //TODO 测试文件上传
-//        if (this.save(minecraftMod)) {
-        //文件移动操作
-        fileService.minecraftModCreate(minecraftMod.getId(), minecraftModTypePostParam.getPath());
-        //翻译操作
-        return true;
-//        }
-//        return false;
+        //测试文件上传
+        if (this.save(minecraftMod)) {
+            //文件移动操作
+            if (fileService.minecraftModCreate(minecraftMod, minecraftModTypePostParam.getPath())) {
+                return false;
+            }
+        }
+        return false;
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.gxlirong.tool.utils;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,18 @@ import java.util.List;
 @Component
 @Slf4j
 public class FileUtils {
+    /**
+     * 获得我的世界模组配置列表
+     *
+     * @param path 路径
+     * @return 我的世界模组配置列表
+     */
+    public List<MinecraftModFileInfo> getMinecraftModFileInfo(String path) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+        return objectMapper.readValue(new File(path + "/mcmod.info"), new TypeReference<List<MinecraftModFileInfo>>() {
+        });
+    }
 
     /**
      * 在指定目录中查找包含关键字的文件，返回包含指定关键字的文件路径.
@@ -102,8 +116,7 @@ public class FileUtils {
             //创建长度
             int len;
             //循环读取数据
-            while ((len = fis.read(data)) != -1)
-            {
+            while ((len = fis.read(data)) != -1) {
                 fos.write(data, 0, len);
             }
             //释放资源
@@ -113,5 +126,44 @@ public class FileUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 获得文件字符串内容列表
+     *
+     * @return List<String>
+     */
+    public List<String> readerFileStringList(String path) throws IOException {
+        if (path == null) {
+            return null;
+        }
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        List<String> stringList = new ArrayList<>();
+        String readLineString;
+        while ((readLineString = bufferedReader.readLine()) != null) {
+            if (!readLineString.equals("")) {
+                stringList.add(readLineString);
+            }
+        }
+        bufferedReader.close();
+        return stringList;
+    }
+
+    /**
+     * 将列表内容写入文件
+     *
+     * @return List<String>
+     */
+    public boolean writerFileStringList(List<String> stringList, String path) throws IOException {
+        if (stringList == null) {
+            return false;
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
+        for (String string : stringList) {
+            bufferedWriter.write(string);
+            bufferedWriter.newLine();
+        }
+        bufferedWriter.close();
+        return true;
     }
 }

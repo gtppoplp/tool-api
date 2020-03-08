@@ -11,18 +11,20 @@ import lombok.Data;
 @Data
 public class ToolMinecraftModPostParam {
 
-    @ApiModelProperty(value = "模组名称")
+    @ApiModelProperty(value = "模组名称", dataType = "String")
     private String name;
 
-    @ApiModelProperty(value = "模组类型")
+    @ApiModelProperty(value = "模组类型", dataType = "String")
     private String categoryId;
 
-    @ApiModelProperty(value = "模组说明")
+    @ApiModelProperty(value = "模组说明", dataType = "String")
     private String description;
 
-    @ApiModelProperty(value = "是否汉化")
+    @ApiModelProperty(value = "是否汉化", dataType = "Boolean")
     private Boolean isChinese = false;
 
-    @ApiModelProperty(value = "文件路径")
+    @ApiModelProperty(value = "是否应用到游戏", dataType = "Boolean")
+    private Boolean isEnabled = false;
+    @ApiModelProperty(value = "文件路径", dataType = "String")
     private String path;
 }

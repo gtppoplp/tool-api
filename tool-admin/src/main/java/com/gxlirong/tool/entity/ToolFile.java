@@ -33,8 +33,8 @@ public class ToolFile extends BaseUser {
     @ApiModelProperty(value = "关联表标识", dataType = "String")
     private Long tableId;
 
-    @ApiModelProperty(value = "关联表名", dataType = "String")
-    private String tableName;
+    @ApiModelProperty(value = "关联表实体名", dataType = "String")
+    private String entityName;
 
     @ApiModelProperty(value = "分类(用于区分文件组)", dataType = "String")
     private String category;

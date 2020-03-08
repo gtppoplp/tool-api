@@ -20,6 +20,10 @@ public class FileUploadConfig {
      */
     private String fileTempPath;
     /**
+     * 常驻文件
+     */
+    private String filePath;
+    /**
      * 我的世界mod文件夹位置
      */
     private String minecraftFilePath;
