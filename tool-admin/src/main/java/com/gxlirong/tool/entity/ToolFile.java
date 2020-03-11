@@ -24,7 +24,7 @@ public class ToolFile extends BaseUser {
     @ApiModelProperty(value = "文件标识", dataType = "String")
     private Long id;
 
-    @ApiModelProperty(value = "文件名(无扩展)", dataType = "String")
+    @ApiModelProperty(value = "文件名(无扩展,上传时文件名)", dataType = "String")
     private String name;
 
     @ApiModelProperty(value = "文件扩展名", dataType = "String")

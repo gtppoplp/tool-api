@@ -27,8 +27,8 @@ public class ChineseUtils {
     private static final String TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";
     private static final String appid = "20200308000394809";
     private static final String securityKey = "U7NyBJbyqoQ6zpWZg2WK";
-    private static final Integer millis = 500;//等待时间0.5秒(因为百度翻译api个人限制为1秒)
-    private static final Integer max = 10;//最大重试次数
+    private static final Integer millis = 50;//等待时间1秒(因为百度翻译api个人限制为1秒)
+    private static final Integer max = 1000;//最大重试次数
 
     /**
      * 获得汉化内容
@@ -54,11 +54,14 @@ public class ChineseUtils {
         uriFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         restTemplate.setUriTemplateHandler(uriFactory);
 
-        ChineseTranslate chineseTranslate;
+        ChineseTranslate chineseTranslate = null;
         int max = ChineseUtils.max;
         do {
             Thread.sleep(millis);
-            chineseTranslate = restTemplate.getForObject(httpUtils.getUrlWithQueryString(TRANS_API_HOST, params), ChineseTranslate.class);
+            try {
+                chineseTranslate = restTemplate.getForObject(httpUtils.getUrlWithQueryString(TRANS_API_HOST, params), ChineseTranslate.class);
+            } catch (Exception ignored) {
+            }
             if (max == 0) {
                 throw new RuntimeException();
             }

@@ -3,13 +3,18 @@ package com.gxlirong.tool.utils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gxlirong.tool.common.api.ResultCode;
+import com.gxlirong.tool.common.exception.OperationException;
 import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.catalina.startup.ExpandWar.deleteDir;
 
 /**
  * 文件工具类
@@ -102,29 +107,27 @@ public class FileUtils {
     /**
      * 复制文件
      *
-     * @param srcPathStr 原路径
-     * @param desPathStr 目标路径
+     * @param source 原路径
+     * @param dest   目标路径
      */
-    public void copy(String srcPathStr, String desPathStr) {
+    public void copy(String source, String dest) {
         try {
-            //创建输入流对象
-            FileInputStream fis = new FileInputStream(srcPathStr);
-            //创建输出流对象
-            FileOutputStream fos = new FileOutputStream(desPathStr);
-            //创建搬运工具
-            byte[] data = new byte[1024 * 8];
-            //创建长度
-            int len;
-            //循环读取数据
-            while ((len = fis.read(data)) != -1) {
-                fos.write(data, 0, len);
+            //自动创建目录
+            File file = new File(dest);
+            if (!file.getParentFile().isDirectory()) {
+                if (!file.getParentFile().exists()) {
+                    if (!file.getParentFile().mkdirs()) {
+                        throw new OperationException(ResultCode.FILE_DIRECTORY_CREATE_ERROR);
+                    }
+                }
             }
-            //释放资源
-            fis.close();
-            //释放资源
-            fis.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            FileChannel inputChannel = new FileInputStream(source).getChannel();
+            FileChannel outputChannel = new FileOutputStream(dest).getChannel();
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+            inputChannel.close();
+            outputChannel.close();
+        } catch (IOException e) {
+            throw new OperationException(ResultCode.FILE_DIRECTORY_CREATE_ERROR, e.getMessage());
         }
     }
 
@@ -165,5 +168,28 @@ public class FileUtils {
         }
         bufferedWriter.close();
         return true;
+    }
+
+    /**
+     * 删除目录及其文件
+     *
+     * @param dir 目录
+     * @return 是否删除
+     */
+    public boolean removeDir(String dir) {
+        File file = new File(dir);
+        if (!file.exists()) {
+            return false;
+        }
+        String[] content = file.list();
+        assert content != null;
+        for (String name : content) {
+            File temp = new File(dir, name);
+            if (temp.isDirectory()) {
+                deleteDir(new File(temp.getAbsolutePath()));
+            }
+            boolean delete = temp.delete();
+        }
+        return file.delete();
     }
 }

@@ -20,8 +20,8 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Slf4j
 class ToolFileServiceImplTest {
-    @Autowired
-    private ToolFileService fileService;
+//    @Autowired
+//    private ToolFileServiceImpl fileService;
 
     @Test
     void chineseStringList() throws InterruptedException {
@@ -61,7 +61,7 @@ class ToolFileServiceImplTest {
 //        StringList.add("item.minecolonies.scepterGold.name=Building Tool");
 //        StringList.add("item.minecolonies.scepterSteel.name=Scan Tool");
 //        StringList.add("item.minecolonies.caliper.name=Caliper");
-        List<String> stringList = fileService.chineseStringList(StringList);
-        log.info("{}", stringList);
+//        List<String> stringList = fileService.chineseStringList(StringList);
+//        log.info("{}", stringList);
     }
 }

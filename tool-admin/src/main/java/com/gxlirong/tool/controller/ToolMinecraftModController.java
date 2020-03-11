@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.*;
 public class ToolMinecraftModController {
     @Autowired
     private ToolMinecraftModService minecraftMod;
+
     @ApiOperation("列表")
     @GetMapping
     @ResponseBody
     public CommonResult<CommonPage<ToolMinecraftMod>> list(ToolMinecraftModQueryParam minecraftModTypeQueryParam) {
         return CommonResult.success(CommonPage.restPage(minecraftMod.getList(minecraftModTypeQueryParam)));
     }
+
     @ApiOperation("新增")
     @PostMapping
     @ResponseBody
@@ -34,6 +36,27 @@ public class ToolMinecraftModController {
             return CommonResult.failed("新增模组失败!");
         }
         return CommonResult.success("新增模组成功!");
+    }
+
+    @ApiOperation("通知读取lang")
+    @PostMapping("/lang/{id}")
+    @ResponseBody
+    @Transactional
+    public CommonResult<String> lang(@PathVariable Long id) {
+        if (!minecraftMod.lang(id)) {
+            return CommonResult.failed("通知读取lag失败!");
+        }
+        return CommonResult.success("通知读取lang成功!");
+    }
+    @ApiOperation("通知汉化")
+    @PostMapping("/chinese/{id}")
+    @ResponseBody
+    @Transactional
+    public CommonResult<String> chinese(@PathVariable Long id) {
+        if (!minecraftMod.chinese(id)) {
+            return CommonResult.failed("通知汉化失败!");
+        }
+        return CommonResult.success("通知汉化成功!");
     }
 
     @ApiOperation("编辑")

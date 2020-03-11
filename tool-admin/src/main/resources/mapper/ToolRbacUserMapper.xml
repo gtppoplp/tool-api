@@ -4,23 +4,23 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.gxlirong.tool.entity.ToolRbacUser">
-        <id column="id" property="id" />
-    <result column="domain" property="domain" />
-    <result column="department_id" property="departmentId" />
-    <result column="organization_id" property="organizationId" />
-    <result column="created_id" property="createdId" />
-    <result column="created_time" property="createdTime" />
-    <result column="updated_id" property="updatedId" />
-    <result column="updated_time" property="updatedTime" />
-    <result column="deleted_id" property="deletedId" />
-    <result column="deleted_time" property="deletedTime" />
-    <result column="is_deleted" property="isDeleted" />
-        <result column="username" property="username" />
-        <result column="password" property="password" />
-        <result column="real_name" property="realName" />
-        <result column="mobile" property="mobile" />
-        <result column="email" property="email" />
-        <result column="is_enabled" property="isEnabled" />
+        <id column="id" property="id"/>
+        <result column="domain" property="domain"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="organization_id" property="organizationId"/>
+        <result column="created_id" property="createdId"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_id" property="updatedId"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="deleted_id" property="deletedId"/>
+        <result column="deleted_time" property="deletedTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="real_name" property="realName"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="is_enabled" property="isEnabled"/>
     </resultMap>
 
 </mapper>

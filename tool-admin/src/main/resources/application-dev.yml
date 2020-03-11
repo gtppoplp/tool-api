@@ -26,16 +26,18 @@ spring:
         enabled: true
 
   redis:
-    # 服务器IP地址
     host: localhost
-    # 连接端口
     port: 6379
-    # Redis服务器连接密码（默认为空）
     password: 67af138483b0fac3a10ea3abe445e91978b41effd37dc51ebc71a50325f0d50a
-    # 使用库
-    database: 1
+    database: 0
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: a59360b37f20bb9ce22710a4ff3a2b6fff5aff51b3ac1aa989687d59fcecbb83
 file:
   upload:
     file-temp-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/temp/
-    minecraft-file-path: D:/Game/我的世界服务器/1.12.2版本/mods/
+    minecraft-mod-file-path: D:/Game/我的世界服务器/1.12.2版本/mods/
+    minecraft-file-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/file/minecraftMod/
     file-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/file/

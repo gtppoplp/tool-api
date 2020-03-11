@@ -20,7 +20,11 @@ public interface ToolMinecraftModService extends IService<ToolMinecraftMod> {
 
     boolean create(ToolMinecraftModPostParam minecraftModTypePostParam);
 
+    boolean chinese(Long id);
+
     boolean delete(Long id);
 
     boolean update(Long id, ToolMinecraftModPostParam minecraftModTypePostParam);
+
+    boolean lang(Long id);
 }

@@ -11,11 +11,14 @@ import com.gxlirong.tool.domain.dto.ToolMinecraftModPostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModQueryParam;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModCategory;
+import com.gxlirong.tool.enums.QueueEnum;
 import com.gxlirong.tool.mapper.ToolMinecraftModMapper;
 import com.gxlirong.tool.service.ToolFileService;
 import com.gxlirong.tool.service.ToolMinecraftModCategoryService;
+import com.gxlirong.tool.service.ToolMinecraftModLangService;
 import com.gxlirong.tool.service.ToolMinecraftModService;
 import com.gxlirong.tool.utils.UserUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,8 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
     private ToolMinecraftModCategoryService minecraftModCategoryService;
     @Autowired
     private ToolFileService fileService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     /**
      * 列表
@@ -82,13 +87,23 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
         userUtils.insertBefore(minecraftMod);
         //测试文件上传
         if (this.save(minecraftMod)) {
-            //文件移动操作
-            if (fileService.minecraftModCreate(minecraftMod, minecraftModTypePostParam.getPath())) {
+            //保存文件到常驻目录
+            if (!fileService.minecraftModCreate(minecraftMod, minecraftModTypePostParam.getPath(), minecraftModTypePostParam.getFileName())) {
                 return false;
             }
+            //保存对应字段信息
+            rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_LANG_CREATE.getRouteKey(), minecraftMod.getId());
         }
-        return false;
+        return true;
     }
+
+    @Override
+    public boolean chinese(Long id) {
+        //通知汉化
+        rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_CHINESE.getRouteKey(), id);
+        return true;
+    }
+
 
     @Override
     public boolean delete(Long id) {
@@ -98,5 +113,12 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
     @Override
     public boolean update(Long id, ToolMinecraftModPostParam minecraftModTypePostParam) {
         return false;
+    }
+
+    @Override
+    public boolean lang(Long id) {
+        //保存对应字段信息
+        rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_LANG_CREATE.getRouteKey(), id);
+        return true;
     }
 }

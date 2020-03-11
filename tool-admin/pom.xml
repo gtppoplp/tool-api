@@ -27,6 +27,11 @@
             <artifactId>tool-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--rabbit mq-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
         <!--springboot test-->
         <dependency>
             <groupId>org.junit.platform</groupId>

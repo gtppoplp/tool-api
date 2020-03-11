@@ -3,9 +3,8 @@ package com.gxlirong.tool.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gxlirong.tool.entity.ToolFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
+import com.gxlirong.tool.entity.ToolMinecraftModLang;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -22,19 +21,28 @@ public interface ToolFileService extends IService<ToolFile> {
      * 我的世界mod文件创建
      *
      * @param minecraftMod ToolMinecraftMod
-     * @param path         文件名(不带路径)
+     * @param tempPath     文件名(不带路径)
+     * @param fileName     真实文件名
      * @return 是否成功
      */
-    boolean minecraftModCreate(ToolMinecraftMod minecraftMod, String path);
+    boolean minecraftModCreate(ToolMinecraftMod minecraftMod, String tempPath, String fileName);
 
     /**
-     * 我的世界mod汉化
+     * 我的世界mod从附件解压并获取狼lang内容
      *
-     * @param minecraftMod ToolMinecraftMod
-     * @param path         文件名(不带路径)
+     * @param filePath 常驻附件位置
+     * @return 返回内容行
+     */
+    List<String> minecraftModLangFromFilePath(String filePath);
+
+    /**
+     * 我的世界mod将汉化内容打包到jar
+     *
+     * @param minecraftModLangList 汉化内容列表
+     * @param path                 文件名(不带路径)
      * @return 是否成功
      */
-    boolean minecraftModChinese(ToolMinecraftMod minecraftMod, String path);
+    boolean minecraftModPackageFromLang(List<ToolMinecraftModLang> minecraftModLangList, String path);
 
     /**
      * 我的世界mod复制mod到游戏目录
@@ -44,13 +52,4 @@ public interface ToolFileService extends IService<ToolFile> {
      * @return 是否成功
      */
     boolean minecraftModUse(ToolMinecraftMod minecraftMod, String path);
-
-    /**
-     * 将英文列表翻译成中文
-     * 这里采用|分割调用翻译(因为个人翻译qbs只能为1,所以尽量按数量翻译后再解析)
-     *
-     * @param enUSStringList 英文列表
-     * @return List<String>
-     */
-    List<String> chineseStringList(List<String> enUSStringList) throws InterruptedException;
 }

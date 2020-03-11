@@ -13,7 +13,6 @@
         <module>tool-admin</module>
         <module>tool-common</module>
         <module>tool-mbg</module>
-        <module>tool-security</module>
     </modules>
 
     <name>tool</name>
