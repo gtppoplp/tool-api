@@ -60,7 +60,7 @@ public class MinecraftChineseReceiver {
             if (file == null) {
                 throw new OperationException(ResultCode.MINECRAFT_MOD_CHINESE_FILE_NONE);
             }
-
+            //获得未汉化的字段
             List<ToolMinecraftModLang> notChineseList = minecraftModLangService.getNotChineseList(minecraftMod.getId());
             if (notChineseList != null) {
                 minecraftModLangService.chineseLangList(notChineseList);

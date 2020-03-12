@@ -29,7 +29,19 @@ public interface ToolMinecraftModLangService extends IService<ToolMinecraftModLa
      */
     boolean createBath(Long id, List<String> enUSStringList, List<String> zhCNStringList);
 
+    /**
+     * 批量更新lang
+     *
+     * @param langList langList
+     * @return boolean
+     */
     boolean updateBath(List<ToolMinecraftModLang> langList);
 
+    /**
+     * 汉化字段列表
+     *
+     * @param langList langList
+     * @throws InterruptedException InterruptedException
+     */
     void chineseLangList(List<ToolMinecraftModLang> langList) throws InterruptedException;
 }
