@@ -1,10 +1,12 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import com.gxlirong.tool.entity.ToolFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -16,6 +18,13 @@ import java.util.List;
  * @since 2020-03-07
  */
 public interface ToolFileService extends IService<ToolFile> {
+    /**
+     * 获得我的世界模组配置列表
+     *
+     * @param path 路径(文件夹路径,需要解压之后的)
+     * @return 我的世界模组配置列表
+     */
+    List<MinecraftModFileInfo> getMinecraftModFileInfo(String path) throws IOException;
 
     /**
      * 我的世界mod文件创建
@@ -28,12 +37,21 @@ public interface ToolFileService extends IService<ToolFile> {
     boolean minecraftModCreate(ToolMinecraftMod minecraftMod, String tempPath, String fileName);
 
     /**
-     * 我的世界mod从附件解压并获取狼lang内容
+     * 解压zip
      *
      * @param filePath 常驻附件位置
+     * @return 返回解压好的路径
+     */
+    String decompressionZip(String filePath);
+
+    /**
+     * 我的世界mod从附件解压并获取狼lang内容
+     *
+     * @param filePath     常驻附件位置
+     * @param langFileName lang文件名
      * @return 返回内容行
      */
-    List<String> minecraftModLangFromFilePath(String filePath);
+    List<String> minecraftModLangFromFilePath(String filePath, String langFileName);
 
     /**
      * 我的世界mod将汉化内容打包到jar

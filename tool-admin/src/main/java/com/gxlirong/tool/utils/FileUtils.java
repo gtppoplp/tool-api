@@ -1,11 +1,7 @@
 package com.gxlirong.tool.utils;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
-import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -24,18 +20,6 @@ import static org.apache.catalina.startup.ExpandWar.deleteDir;
 @Component
 @Slf4j
 public class FileUtils {
-    /**
-     * 获得我的世界模组配置列表
-     *
-     * @param path 路径
-     * @return 我的世界模组配置列表
-     */
-    public List<MinecraftModFileInfo> getMinecraftModFileInfo(String path) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-        return objectMapper.readValue(new File(path + "/mcmod.info"), new TypeReference<List<MinecraftModFileInfo>>() {
-        });
-    }
 
     /**
      * 在指定目录中查找包含关键字的文件，返回包含指定关键字的文件路径.

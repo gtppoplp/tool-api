@@ -44,10 +44,11 @@ public class ToolMinecraftModController {
     @Transactional
     public CommonResult<String> lang(@PathVariable Long id) {
         if (!minecraftMod.lang(id)) {
-            return CommonResult.failed("通知读取lag失败!");
+            return CommonResult.failed("通知读取lang失败!");
         }
         return CommonResult.success("通知读取lang成功!");
     }
+
     @ApiOperation("通知汉化")
     @PostMapping("/chinese/{id}")
     @ResponseBody

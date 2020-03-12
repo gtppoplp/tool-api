@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class ToolMinecraftModLangServiceImpl extends ServiceImpl<ToolMinecraftMo
     public List<ToolMinecraftModLang> getNotChineseList(Long id) {
         return this.list(
                 new QueryWrapper<ToolMinecraftModLang>()
+                        .eq("mod_id", id)
                         .eq("is_deleted", false)
                         .eq("is_chinese", false)
         );
@@ -41,22 +43,44 @@ public class ToolMinecraftModLangServiceImpl extends ServiceImpl<ToolMinecraftMo
     public List<ToolMinecraftModLang> getChineseList(Long id) {
         return this.list(
                 new QueryWrapper<ToolMinecraftModLang>()
+                        .eq("mod_id", id)
                         .eq("is_deleted", false)
                         .eq("is_chinese", true)
         );
     }
 
     @Override
-    public boolean createBath(Long id, List<String> langList) {
+    public boolean createBath(Long id, List<String> enUSStringList, List<String> zhCNStringList) {
+        List<ToolMinecraftModLang> toolMinecraftModLangList = this.list(
+                new QueryWrapper<ToolMinecraftModLang>()
+                        .eq("mod_id", id)
+                        .eq("is_deleted", false)
+        );
+
         ArrayList<ToolMinecraftModLang> minecraftModLangList = new ArrayList<>();
-        for (String lang : langList) {
-            if (lang.contains("=")) {
+        for (String zhCNString : zhCNStringList) {
+            if (zhCNString.contains("=")) {
                 ToolMinecraftModLang minecraftModLang = new ToolMinecraftModLang();
                 minecraftModLang.setModId(id);
-                minecraftModLang.setField(lang.substring(0, lang.lastIndexOf("=")));
-                minecraftModLang.setLang(lang.substring(lang.lastIndexOf("=") + 1));
+                minecraftModLang.setField(zhCNString.substring(0, zhCNString.lastIndexOf("=")));
+                for (String enUSString : enUSStringList) {
+                    if (enUSString.contains("=") &&
+                            enUSString.substring(0, enUSString.lastIndexOf("="))
+                                    .equals(
+                                            zhCNString.substring(0, zhCNString.lastIndexOf("="))
+                                    )
+                    )
+                        minecraftModLang.setEnLang(enUSString.substring(enUSString.lastIndexOf("=") + 1));
+                }
+                minecraftModLang.setLang(zhCNString.substring(zhCNString.lastIndexOf("=") + 1));
                 minecraftModLang.setIsChinese(false);
                 minecraftModLangList.add(minecraftModLang);
+            }
+        }
+        //清除已经保存的数据
+        if (toolMinecraftModLangList != null) {
+            for (ToolMinecraftModLang toolMinecraftModLang : toolMinecraftModLangList) {
+                minecraftModLangList.removeIf(x -> x.getField().equals(toolMinecraftModLang.getField()));
             }
         }
         return this.saveBatch(minecraftModLangList);

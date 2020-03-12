@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxlirong.tool.mapper.ToolMinecraftModInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxlirong.tool.entity.ToolMinecraftModInfo">
+        <id column="id" property="id" />
+        <result column="mod_id" property="modId" />
+        <result column="modid" property="modid" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="version" property="version" />
+        <result column="mcversion" property="mcversion" />
+        <result column="url" property="url" />
+        <result column="updateUrl" property="updateUrl" />
+        <result column="authorList" property="authorList" />
+        <result column="credits" property="credits" />
+        <result column="logoFile" property="logoFile" />
+        <result column="screenshots" property="screenshots" />
+        <result column="dependencies" property="dependencies" />
+    </resultMap>
+
+</mapper>

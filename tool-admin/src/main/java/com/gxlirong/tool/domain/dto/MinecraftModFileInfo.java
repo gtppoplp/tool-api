@@ -23,5 +23,4 @@ public class MinecraftModFileInfo {
     private String logoFile;
     private List<String> screenshots;
     private List<String> dependencies;
-
 }

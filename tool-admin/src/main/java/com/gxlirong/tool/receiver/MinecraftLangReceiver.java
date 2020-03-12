@@ -7,16 +7,14 @@ import com.gxlirong.tool.entity.ToolFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.enums.LogEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
-import com.gxlirong.tool.service.ToolFileService;
-import com.gxlirong.tool.service.ToolLogService;
-import com.gxlirong.tool.service.ToolMinecraftModLangService;
-import com.gxlirong.tool.service.ToolMinecraftModService;
+import com.gxlirong.tool.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,10 +35,13 @@ public class MinecraftLangReceiver {
     private ToolMinecraftModLangService minecraftModLangService;
     @Autowired
     private ToolLogService logService;
+    @Autowired
+    private ToolMinecraftModInfoService minecraftModInfoService;
 
     @RabbitHandler
     public void handle(Long minecraftModId) {
         try {
+            //读取mod
             ToolMinecraftMod minecraftMod = minecraftModService.getOne(
                     new QueryWrapper<ToolMinecraftMod>()
                             .eq("id", minecraftModId)
@@ -49,6 +50,7 @@ public class MinecraftLangReceiver {
             if (minecraftMod == null) {
                 throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_MOD_NONE);
             }
+            //读取附件
             ToolFile file = fileService.getOne(
                     new QueryWrapper<ToolFile>()
                             .eq("table_id", minecraftMod.getId())
@@ -59,11 +61,43 @@ public class MinecraftLangReceiver {
             if (file == null) {
                 throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_FILE_NONE);
             }
-            List<String> langList = fileService.minecraftModLangFromFilePath(file.getPath());
-            if (langList == null) {
-                throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_FILE_CONTENT_NONE);
+            //解压mod 附件
+            String decompressionPath = fileService.decompressionZip(file.getPath());
+            log.error("解压mod 附件完成");
+            //保存mod info信息
+            if (!minecraftModInfoService.create(minecraftMod, decompressionPath)) {
+                throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_FILE_NONE);
             }
-            if (!minecraftModLangService.createBath(minecraftMod.getId(), langList)) {
+            log.error("保存mod info信息完成");
+            //读取英文参数列表
+            List<String> enUSStringList = fileService.minecraftModLangFromFilePath(decompressionPath, "en_us.lang");
+            if (enUSStringList == null) {
+                throw new OperationException(ResultCode.MINECRAFT_MOD_CREATE_CATEGORY_FILE_NONE_LANG);
+            }
+            log.error("读取英文参数列表完成");
+            //读取中文参数列表
+            List<String> zhCNStringList = fileService.minecraftModLangFromFilePath(decompressionPath, "zh_cn.lang");
+            log.error("读取中文参数列表完成");
+            //合并英中参数 如果zh不存在en的字段,则将en的字段添加到zh
+            if (zhCNStringList == null) {
+                zhCNStringList = new ArrayList<>();
+            }
+            for (String enUSString : enUSStringList) {
+                boolean zhHaveValue = false;
+                for (String zhCNString : zhCNStringList) {
+                    if (enUSString.contains("=") &&
+                            zhCNString.contains("=") &&
+                            enUSString.substring(0, enUSString.indexOf("=")).equals(zhCNString.substring(0, zhCNString.indexOf("=")))) {
+                        zhHaveValue = true;
+                        break;
+                    }
+                }
+                if (!zhHaveValue) {
+                    zhCNStringList.add(enUSString);
+                }
+            }
+            log.error("合并英中参数完成");
+            if (!minecraftModLangService.createBath(minecraftMod.getId(), enUSStringList, zhCNStringList)) {
                 throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_FILE_CREATE_ERROR);
             }
             log.error("我的世界字段对应消息的处理完成");

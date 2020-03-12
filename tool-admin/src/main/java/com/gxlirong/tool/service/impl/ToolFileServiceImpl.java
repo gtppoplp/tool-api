@@ -1,10 +1,12 @@
 package com.gxlirong.tool.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
 import com.gxlirong.tool.config.FileUploadConfig;
-import com.gxlirong.tool.domain.dto.ChineseTranslate;
 import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import com.gxlirong.tool.entity.ToolFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
@@ -12,7 +14,6 @@ import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
 import com.gxlirong.tool.mapper.ToolFileMapper;
 import com.gxlirong.tool.service.ToolFileService;
-import com.gxlirong.tool.utils.ChineseUtils;
 import com.gxlirong.tool.utils.FileUtils;
 import com.gxlirong.tool.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +41,21 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
     @Autowired
     private FileUtils fileUtils;
     @Autowired
-    private ChineseUtils chineseUtils;
-    @Autowired
     private UserUtils userUtils;
+
+    /**
+     * 获得我的世界模组配置列表
+     *
+     * @param path 路径
+     * @return 我的世界模组配置列表
+     */
+    public List<MinecraftModFileInfo> getMinecraftModFileInfo(String path) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+        return objectMapper.readValue(new File(path + "/mcmod.info"), new TypeReference<List<MinecraftModFileInfo>>() {
+        });
+    }
+
 
     /**
      * 获得文件实体
@@ -83,69 +96,44 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
     }
 
     /**
-     * 我的世界mod从附件解压并获取狼lang内容
+     * 我的世界解压mod
      *
      * @param filePath 常驻附件位置
+     * @return 返回解压好的路径
+     */
+    @Override
+    public String decompressionZip(String filePath) {
+        String path = filePath.substring(0, filePath.lastIndexOf("."));
+        ZipUtil.unpack(new File(filePath), new File(path));
+        return path;
+    }
+
+    /**
+     * 我的世界mod从附件解压并获取狼lang内容
+     *
+     * @param filePath     常驻附件位置
+     * @param langFileName lang文件名
      * @return 返回内容行
      */
     @Override
-    public List<String> minecraftModLangFromFilePath(String filePath) {
-        File enUSFile = null;
-        File zhCNFile = null;
-        List<String> zhCNStringList = null;
-        String path = filePath.substring(0, filePath.lastIndexOf("."));
-        //解压
-        ZipUtil.unpack(
-                new File(filePath),
-                new File(path)
-        );
-        log.info("解压完成");
+    public List<String> minecraftModLangFromFilePath(String filePath, String langFileName) {
         //查找lang后缀文件名
-        List<File> langFileList = fileUtils.searchExtension(new File(path), "lang"
-        );
-        log.info("查找完成");
+        List<File> langFileList = fileUtils.searchExtension(new File(filePath), "lang");
         try {
             //读取正确的文件
             //读取文件夹下modId.info文件中的json值modId,匹配改路径下的en_us.lang
-            List<MinecraftModFileInfo> minecraftModFileInfo = fileUtils.getMinecraftModFileInfo(path);
+            List<MinecraftModFileInfo> minecraftModFileInfo = this.getMinecraftModFileInfo(filePath);
             String modId = "";
             if (!minecraftModFileInfo.isEmpty()) {
                 modId = "\\" + minecraftModFileInfo.get(0).getModid() + "\\";
             }
             for (File langFile : langFileList) {
-                if (langFile.getName().toLowerCase().equals("en_us.lang") && langFile.getPath().contains(modId)) {
-                    enUSFile = langFile;
-                }
-                if (langFile.getName().toLowerCase().equals("zh_cn.lang") && langFile.getPath().contains(modId)) {
-                    zhCNFile = langFile;
+                if (langFile.getName().toLowerCase().equals(langFileName) && langFile.getPath().contains(modId)) {
+                    //读取数据存入list
+                    return fileUtils.readerFileStringList(langFile.getPath());
                 }
             }
-            log.info("获取正确lang完成");
-            if (enUSFile == null) {
-                throw new OperationException(ResultCode.MINECRAFT_MOD_CREATE_CATEGORY_FILE_NONE_LANG);
-            }
-            if (zhCNFile == null) {
-                fileUtils.copy(enUSFile.getPath(), enUSFile.getParentFile() + "/zh_cn.lang");
-            } else {
-                zhCNStringList = fileUtils.readerFileStringList(zhCNFile.getPath());
-            }
-            //读取数据存入list
-            List<String> enUSStringList = fileUtils.readerFileStringList(enUSFile.getPath());
-            //如果zh存在翻译,则将en需要翻译的行删除,最后enUSStringList与zhCNStringList合并
-            if (zhCNStringList != null) {
-                for (int i = 0; i < enUSStringList.size(); i++) {
-                    for (String zhCNString : zhCNStringList) {
-                        String enUSString = enUSStringList.get(i);
-                        if (enUSString.contains("=") &&
-                                zhCNString.contains("=") &&
-                                enUSString.substring(0, enUSString.indexOf("=")).equals(zhCNString.substring(0, zhCNString.indexOf("=")))) {
-                            enUSStringList.set(i, zhCNString);
-                        }
-                    }
-                }
-            }
-            log.info("匹配数据完成");
-            return enUSStringList;
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,7 +177,7 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
                     fileUploadConfig.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."))), "lang"
             );
             //读取正确的文件->读取文件夹下modId.info文件中的json值modId,匹配改路径下的en_us.lang
-            List<MinecraftModFileInfo> minecraftModFileInfo = fileUtils.getMinecraftModFileInfo(extractFolder);
+            List<MinecraftModFileInfo> minecraftModFileInfo = this.getMinecraftModFileInfo(extractFolder);
             String modId = "";
             if (!minecraftModFileInfo.isEmpty()) {
                 modId = "\\" + minecraftModFileInfo.get(0).getModid() + "\\";

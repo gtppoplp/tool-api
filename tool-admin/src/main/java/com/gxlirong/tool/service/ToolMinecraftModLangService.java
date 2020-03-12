@@ -19,7 +19,15 @@ public interface ToolMinecraftModLangService extends IService<ToolMinecraftModLa
 
     List<ToolMinecraftModLang> getChineseList(Long id);
 
-    boolean createBath(Long id, List<String> langList);
+    /**
+     * 我的世界模组lang字段批量创建
+     *
+     * @param id             模组标识
+     * @param enUSStringList enUSStringList
+     * @param zhCNStringList zhCNStringList
+     * @return boolean
+     */
+    boolean createBath(Long id, List<String> enUSStringList, List<String> zhCNStringList);
 
     boolean updateBath(List<ToolMinecraftModLang> langList);
 

@@ -35,6 +35,9 @@ public class ToolMinecraftModLang {
     @ApiModelProperty(value = "字段")
     private String field;
 
+    @ApiModelProperty(value = "英文")
+    private String enLang;
+
     @ApiModelProperty(value = "翻译")
     private String lang;
 
