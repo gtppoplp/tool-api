@@ -3,13 +3,13 @@ package com.gxlirong.tool.receiver;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
-import com.gxlirong.tool.entity.ToolFile;
+import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.LogEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
-import com.gxlirong.tool.service.ToolFileService;
-import com.gxlirong.tool.service.ToolLogService;
+import com.gxlirong.tool.service.ToolCommonFileService;
+import com.gxlirong.tool.service.ToolCommonLogService;
 import com.gxlirong.tool.service.ToolMinecraftModLangService;
 import com.gxlirong.tool.service.ToolMinecraftModService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +31,13 @@ import java.util.List;
 public class MinecraftChineseReceiver {
 
     @Autowired
-    private ToolFileService fileService;
+    private ToolCommonFileService fileService;
     @Autowired
     private ToolMinecraftModService minecraftModService;
     @Autowired
     private ToolMinecraftModLangService minecraftModLangService;
     @Autowired
-    private ToolLogService logService;
+    private ToolCommonLogService logService;
 
     @RabbitHandler
     public void handle(Long minecraftModId) {
@@ -50,8 +50,8 @@ public class MinecraftChineseReceiver {
             if (minecraftMod == null) {
                 throw new OperationException(ResultCode.MINECRAFT_MOD_CHINESE_MOD_NONE);
             }
-            ToolFile file = fileService.getOne(
-                    new QueryWrapper<ToolFile>()
+            ToolCommonFile file = fileService.getOne(
+                    new QueryWrapper<ToolCommonFile>()
                             .eq("table_id", minecraftMod.getId())
                             .eq("entity_name", minecraftMod.getClass().getSimpleName())
                             .eq("category", ToolMinecraftModFileEnum.CATEGORY_PERMANENT.getCategory())

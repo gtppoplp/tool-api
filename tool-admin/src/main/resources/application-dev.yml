@@ -35,9 +35,10 @@ spring:
     port: 5672
     username: admin
     password: a59360b37f20bb9ce22710a4ff3a2b6fff5aff51b3ac1aa989687d59fcecbb83
-file:
-  upload:
-    file-temp-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/temp/
-    minecraft-mod-file-path: D:/Game/我的世界服务器/1.12.2版本/mods/
-    minecraft-file-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/file/minecraftMod/
-    file-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/file/
+customize:
+  file:
+    upload:
+      file-temp-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/temp/
+      minecraft-mod-file-path: D:/Game/我的世界服务器/1.12.2版本/mods/
+      minecraft-file-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/file/minecraftMod/
+      file-path: C:/Users/gtppo/Desktop/gxlirong/tool.gxlirong.com/www/backend/file/

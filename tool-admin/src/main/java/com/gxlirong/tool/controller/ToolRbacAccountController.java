@@ -5,6 +5,7 @@ import com.gxlirong.tool.domain.dto.ToolRbacUserLoginPostParam;
 import com.gxlirong.tool.domain.vo.ToolRbacUserInfoVo;
 import com.gxlirong.tool.domain.vo.ToolRbacUserLoginVo;
 import com.gxlirong.tool.entity.ToolRbacUser;
+import com.gxlirong.tool.properties.JwtProperties;
 import com.gxlirong.tool.service.ToolRbacUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,10 +19,8 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/security/account")
 public class ToolRbacAccountController {
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
+    @Autowired
+    private JwtProperties jwtProperties;
     @Autowired
     private ToolRbacUserService rbacUserService;
 
@@ -34,7 +33,7 @@ public class ToolRbacAccountController {
         }
         ToolRbacUserLoginVo rbacUserLoginVo = new ToolRbacUserLoginVo();
         rbacUserLoginVo.setToken(token);
-        rbacUserLoginVo.setTokenHead(tokenHead);
+        rbacUserLoginVo.setTokenHead(jwtProperties.getTokenHead());
         return CommonResult.success(rbacUserLoginVo);
     }
 

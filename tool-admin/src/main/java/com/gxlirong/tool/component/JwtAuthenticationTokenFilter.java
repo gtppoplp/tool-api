@@ -1,5 +1,6 @@
 package com.gxlirong.tool.component;
 
+import com.gxlirong.tool.properties.JwtProperties;
 import com.gxlirong.tool.utils.JwtTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,18 +30,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtTokenUtils jwtTokenUtils;
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
+    @Autowired
+    private JwtProperties jwtProperties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        String authHeader = request.getHeader(this.tokenHeader);
-        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
-            String authToken = authHeader.substring(this.tokenHead.length());// The part after "Bearer "
+        String authHeader = request.getHeader(jwtProperties.getTokenHeader());
+        if (authHeader != null && authHeader.startsWith(jwtProperties.getTokenHead())) {
+            String authToken = authHeader.substring(jwtProperties.getTokenHead().length());// The part after "Bearer "
             String username = jwtTokenUtils.getUserNameFromToken(authToken);
             LOGGER.info("checking username:{}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

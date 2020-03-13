@@ -1,25 +1,22 @@
 package com.gxlirong.tool.service.impl;
 
-import com.gxlirong.tool.service.ToolFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Slf4j
-class ToolFileServiceImplTest {
+class ToolCommonFileServiceImplTest {
 //    @Autowired
 //    private ToolFileServiceImpl fileService;
 

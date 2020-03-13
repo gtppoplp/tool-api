@@ -1,7 +1,7 @@
 package com.gxlirong.tool.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gxlirong.tool.entity.ToolFile;
+import com.gxlirong.tool.entity.ToolCommonFile;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.gxlirong.tool.entity.ToolFile;
  * @author lirong
  * @since 2020-03-07
  */
-public interface ToolFileMapper extends BaseMapper<ToolFile> {
+public interface ToolCommonFileMapper extends BaseMapper<ToolCommonFile> {
 
 }

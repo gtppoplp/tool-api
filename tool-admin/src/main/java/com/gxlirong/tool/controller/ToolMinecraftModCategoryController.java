@@ -24,21 +24,18 @@ public class ToolMinecraftModCategoryController {
 
     @ApiOperation("列表")
     @GetMapping
-    @ResponseBody
     public CommonResult<CommonPage<ToolMinecraftModCategory>> list(ToolMinecraftModCategoryQueryParam minecraftModTypeQueryParam) {
         return CommonResult.success(CommonPage.restPage(minecraftModTypeService.getList(minecraftModTypeQueryParam)));
     }
 
     @ApiOperation("所有列表")
     @GetMapping("/all")
-    @ResponseBody
     public CommonResult<List<ToolMinecraftModCategory>> all() {
         return CommonResult.success(minecraftModTypeService.getAll());
     }
 
     @ApiOperation("新增")
     @PostMapping
-    @ResponseBody
     @Transactional
     public CommonResult<String> create(@RequestBody ToolMinecraftModCategoryPostParam minecraftModTypePostParam) {
         if (!minecraftModTypeService.create(minecraftModTypePostParam)) {
@@ -49,7 +46,6 @@ public class ToolMinecraftModCategoryController {
 
     @ApiOperation("编辑")
     @PutMapping("/{id}")
-    @ResponseBody
     @Transactional
     public CommonResult<String> update(@ApiParam(name = "id", value = "模组类型标识", required = true)
                                        @PathVariable Long id,
@@ -62,7 +58,6 @@ public class ToolMinecraftModCategoryController {
 
     @ApiOperation("删除")
     @DeleteMapping("/{id}")
-    @ResponseBody
     @Transactional
     public CommonResult<String> delete(@PathVariable Long id) {
         if (!minecraftModTypeService.delete(id)) {

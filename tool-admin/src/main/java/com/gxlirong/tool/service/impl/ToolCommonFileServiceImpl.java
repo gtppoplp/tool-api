@@ -6,14 +6,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
-import com.gxlirong.tool.config.FileUploadConfig;
+import com.gxlirong.tool.properties.FileUploadProperties;
 import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
-import com.gxlirong.tool.entity.ToolFile;
+import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
-import com.gxlirong.tool.mapper.ToolFileMapper;
-import com.gxlirong.tool.service.ToolFileService;
+import com.gxlirong.tool.mapper.ToolCommonFileMapper;
+import com.gxlirong.tool.service.ToolCommonFileService;
 import com.gxlirong.tool.utils.FileUtils;
 import com.gxlirong.tool.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +35,9 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> implements ToolFileService {
+public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper, ToolCommonFile> implements ToolCommonFileService {
     @Autowired
-    private FileUploadConfig fileUploadConfig;
+    private FileUploadProperties fileUploadProperties;
     @Autowired
     private FileUtils fileUtils;
     @Autowired
@@ -64,14 +64,14 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
      * @param path         文件名(不带路径)
      * @return 文件实体
      */
-    private ToolFile getCreateToolFile(ToolMinecraftMod minecraftMod, String path) {
-        ToolFile toolFile = new ToolFile();
-        toolFile.setName(path.substring(0, path.lastIndexOf(".")));
-        toolFile.setExtension(path.substring(path.lastIndexOf(".") + 1));
-        toolFile.setTableId(minecraftMod.getId());
-        toolFile.setEntityName(minecraftMod.getClass().getSimpleName());
-        userUtils.insertBefore(toolFile);
-        return toolFile;
+    private ToolCommonFile getCreateToolFile(ToolMinecraftMod minecraftMod, String path) {
+        ToolCommonFile toolCommonFile = new ToolCommonFile();
+        toolCommonFile.setName(path.substring(0, path.lastIndexOf(".")));
+        toolCommonFile.setExtension(path.substring(path.lastIndexOf(".") + 1));
+        toolCommonFile.setTableId(minecraftMod.getId());
+        toolCommonFile.setEntityName(minecraftMod.getClass().getSimpleName());
+        userUtils.insertBefore(toolCommonFile);
+        return toolCommonFile;
     }
 
     /**
@@ -88,11 +88,11 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
             throw new OperationException(ResultCode.MINECRAFT_MOD_CREATE_CATEGORY_FILE_EXTENSION);
         }
         //移动临时文件到常驻文件夹
-        fileUtils.copy(fileUploadConfig.getFileTempPath() + tempPath, fileUploadConfig.getMinecraftFilePath() + fileName);
-        ToolFile toolFile = this.getCreateToolFile(minecraftMod, fileName);
-        toolFile.setPath(fileUploadConfig.getMinecraftFilePath() + fileName);
-        toolFile.setCategory(ToolMinecraftModFileEnum.CATEGORY_PERMANENT.getCategory());
-        return this.save(toolFile);
+        fileUtils.copy(fileUploadProperties.getFileTempPath() + tempPath, fileUploadProperties.getMinecraftFilePath() + fileName);
+        ToolCommonFile toolCommonFile = this.getCreateToolFile(minecraftMod, fileName);
+        toolCommonFile.setPath(fileUploadProperties.getMinecraftFilePath() + fileName);
+        toolCommonFile.setCategory(ToolMinecraftModFileEnum.CATEGORY_PERMANENT.getCategory());
+        return this.save(toolCommonFile);
     }
 
     /**
@@ -150,12 +150,12 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
     @Override
     public boolean minecraftModUse(ToolMinecraftMod minecraftMod, String path) {
         //移动到游戏目录
-        fileUtils.copy(fileUploadConfig.getMinecraftFilePath() + path, fileUploadConfig.getMinecraftModFilePath() + path);
-        ToolFile toolFile = this.getCreateToolFile(minecraftMod, path);
-        toolFile.setPath(fileUploadConfig.getMinecraftFilePath() + path);
-        toolFile.setCategory(ToolMinecraftModFileEnum.CATEGORY_GAME.getCategory());
+        fileUtils.copy(fileUploadProperties.getMinecraftFilePath() + path, fileUploadProperties.getMinecraftModFilePath() + path);
+        ToolCommonFile toolCommonFile = this.getCreateToolFile(minecraftMod, path);
+        toolCommonFile.setPath(fileUploadProperties.getMinecraftFilePath() + path);
+        toolCommonFile.setCategory(ToolMinecraftModFileEnum.CATEGORY_GAME.getCategory());
         log.info("移动到游戏目录完成");
-        return this.save(toolFile);
+        return this.save(toolCommonFile);
     }
 
     /**
@@ -171,10 +171,10 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
             File enUSFile = null;
             List<String> zhCNStringList = new ArrayList<>();
             //读取jar文件目录
-            String extractFolder = fileUploadConfig.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."));
+            String extractFolder = fileUploadProperties.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."));
             //查找lang后缀文件名
             List<File> langFileList = fileUtils.searchExtension(new File(
-                    fileUploadConfig.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."))), "lang"
+                    fileUploadProperties.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."))), "lang"
             );
             //读取正确的文件->读取文件夹下modId.info文件中的json值modId,匹配改路径下的en_us.lang
             List<MinecraftModFileInfo> minecraftModFileInfo = this.getMinecraftModFileInfo(extractFolder);
@@ -204,8 +204,8 @@ public class ToolFileServiceImpl extends ServiceImpl<ToolFileMapper, ToolFile> i
         }
         //重新打包并移动到常驻文件夹
         ZipUtil.pack(
-                new File(fileUploadConfig.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."))),
-                new File(fileUploadConfig.getMinecraftFilePath() + path)
+                new File(fileUploadProperties.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."))),
+                new File(fileUploadProperties.getMinecraftFilePath() + path)
         );
         log.info("重新打包并移动到常驻文件夹完成");
         return true;

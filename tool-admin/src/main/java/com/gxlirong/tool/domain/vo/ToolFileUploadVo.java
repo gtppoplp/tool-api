@@ -1,5 +1,6 @@
 package com.gxlirong.tool.domain.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -9,5 +10,6 @@ import lombok.Data;
  */
 @Data
 public class ToolFileUploadVo {
+    @ApiModelProperty("附件名")
     private String path;
 }

@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "ToolFile对象", description = "文件表")
-public class ToolFile extends BaseUser {
+public class ToolCommonFile extends BaseUser {
 
     private static final long serialVersionUID = 1L;
 

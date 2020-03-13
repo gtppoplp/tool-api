@@ -2,7 +2,7 @@ package com.gxlirong.tool.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gxlirong.tool.common.api.CommonResult;
-import com.gxlirong.tool.config.FileUploadConfig;
+import com.gxlirong.tool.properties.FileUploadProperties;
 import com.gxlirong.tool.domain.vo.ToolFileUploadVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @RequestMapping("/component/file")
 public class ToolFileController {
     @Autowired
-    private FileUploadConfig fileUploadConfig;
+    private FileUploadProperties fileUploadProperties;
 
     @ApiOperation("上传")
     @PostMapping("/upload")
@@ -33,7 +33,7 @@ public class ToolFileController {
                 return CommonResult.failed("上传失败，请选择文件");
             }
             String saveFileName = IdWorker.getTimeId() + fileName.substring(fileName.lastIndexOf("."));
-            String path = fileUploadConfig.getFileTempPath() + saveFileName;
+            String path = fileUploadProperties.getFileTempPath() + saveFileName;
             File dest = new File(path);
             if (!dest.getParentFile().exists()) {
                 if (!dest.getParentFile().mkdir()) {

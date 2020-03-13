@@ -1,7 +1,7 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gxlirong.tool.entity.ToolLog;
+import com.gxlirong.tool.entity.ToolCommonLog;
 
 /**
  * <p>
@@ -11,7 +11,7 @@ import com.gxlirong.tool.entity.ToolLog;
  * @author lirong
  * @since 2020-03-11
  */
-public interface ToolLogService extends IService<ToolLog> {
+public interface ToolCommonLogService extends IService<ToolCommonLog> {
 
     void create(String type, Long minecraftModId, String entityName, String log);
 }

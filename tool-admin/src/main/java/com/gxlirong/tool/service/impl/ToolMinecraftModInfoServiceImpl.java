@@ -5,7 +5,7 @@ import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModInfo;
 import com.gxlirong.tool.mapper.ToolMinecraftModInfoMapper;
-import com.gxlirong.tool.service.ToolFileService;
+import com.gxlirong.tool.service.ToolCommonFileService;
 import com.gxlirong.tool.service.ToolMinecraftModInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 public class ToolMinecraftModInfoServiceImpl extends ServiceImpl<ToolMinecraftModInfoMapper, ToolMinecraftModInfo> implements ToolMinecraftModInfoService {
     @Autowired
-    private ToolFileService fileService;
+    private ToolCommonFileService fileService;
 
     /**
      * 创建mod信息

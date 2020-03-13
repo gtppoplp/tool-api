@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @ApiModel(value = "ToolLog对象", description = "日志表")
-public class ToolLog {
+public class ToolCommonLog {
 
     private static final long serialVersionUID = 1L;
 

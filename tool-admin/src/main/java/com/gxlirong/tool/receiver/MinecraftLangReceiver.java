@@ -3,7 +3,7 @@ package com.gxlirong.tool.receiver;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
-import com.gxlirong.tool.entity.ToolFile;
+import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.enums.LogEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
@@ -28,13 +28,13 @@ import java.util.List;
 public class MinecraftLangReceiver {
 
     @Autowired
-    private ToolFileService fileService;
+    private ToolCommonFileService fileService;
     @Autowired
     private ToolMinecraftModService minecraftModService;
     @Autowired
     private ToolMinecraftModLangService minecraftModLangService;
     @Autowired
-    private ToolLogService logService;
+    private ToolCommonLogService logService;
     @Autowired
     private ToolMinecraftModInfoService minecraftModInfoService;
 
@@ -51,8 +51,8 @@ public class MinecraftLangReceiver {
                 throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_MOD_NONE);
             }
             //读取附件
-            ToolFile file = fileService.getOne(
-                    new QueryWrapper<ToolFile>()
+            ToolCommonFile file = fileService.getOne(
+                    new QueryWrapper<ToolCommonFile>()
                             .eq("table_id", minecraftMod.getId())
                             .eq("entity_name", minecraftMod.getClass().getSimpleName())
                             .eq("category", ToolMinecraftModFileEnum.CATEGORY_PERMANENT.getCategory())

@@ -13,9 +13,8 @@ import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModCategory;
 import com.gxlirong.tool.enums.QueueEnum;
 import com.gxlirong.tool.mapper.ToolMinecraftModMapper;
-import com.gxlirong.tool.service.ToolFileService;
+import com.gxlirong.tool.service.ToolCommonFileService;
 import com.gxlirong.tool.service.ToolMinecraftModCategoryService;
-import com.gxlirong.tool.service.ToolMinecraftModLangService;
 import com.gxlirong.tool.service.ToolMinecraftModService;
 import com.gxlirong.tool.utils.UserUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -38,7 +37,7 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
     @Autowired
     private ToolMinecraftModCategoryService minecraftModCategoryService;
     @Autowired
-    private ToolFileService fileService;
+    private ToolCommonFileService fileService;
     @Autowired
     private RabbitTemplate rabbitTemplate;
 

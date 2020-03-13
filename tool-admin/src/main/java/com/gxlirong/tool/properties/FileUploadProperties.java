@@ -1,4 +1,4 @@
-package com.gxlirong.tool.config;
+package com.gxlirong.tool.properties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "file.upload")
-public class FileUploadConfig {
+@ConfigurationProperties(prefix = "customize.file.upload")
+public class FileUploadProperties {
     /**
      * 文件临时位置
      */

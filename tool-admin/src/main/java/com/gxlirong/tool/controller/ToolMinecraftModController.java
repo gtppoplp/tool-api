@@ -22,14 +22,12 @@ public class ToolMinecraftModController {
 
     @ApiOperation("列表")
     @GetMapping
-    @ResponseBody
     public CommonResult<CommonPage<ToolMinecraftMod>> list(ToolMinecraftModQueryParam minecraftModTypeQueryParam) {
         return CommonResult.success(CommonPage.restPage(minecraftMod.getList(minecraftModTypeQueryParam)));
     }
 
     @ApiOperation("新增")
     @PostMapping
-    @ResponseBody
     @Transactional
     public CommonResult<String> create(@RequestBody ToolMinecraftModPostParam minecraftModTypePostParam) {
         if (!minecraftMod.create(minecraftModTypePostParam)) {
@@ -40,7 +38,6 @@ public class ToolMinecraftModController {
 
     @ApiOperation("通知读取lang")
     @PostMapping("/lang/{id}")
-    @ResponseBody
     @Transactional
     public CommonResult<String> lang(@PathVariable Long id) {
         if (!minecraftMod.lang(id)) {
@@ -51,7 +48,6 @@ public class ToolMinecraftModController {
 
     @ApiOperation("通知汉化")
     @PostMapping("/chinese/{id}")
-    @ResponseBody
     @Transactional
     public CommonResult<String> chinese(@PathVariable Long id) {
         if (!minecraftMod.chinese(id)) {
@@ -62,7 +58,6 @@ public class ToolMinecraftModController {
 
     @ApiOperation("编辑")
     @PutMapping("/{id}")
-    @ResponseBody
     @Transactional
     public CommonResult<String> update(@ApiParam(name = "id", value = "模组标识", required = true)
                                        @PathVariable Long id,
@@ -75,7 +70,6 @@ public class ToolMinecraftModController {
 
     @ApiOperation("删除")
     @DeleteMapping("/{id}")
-    @ResponseBody
     @Transactional
     public CommonResult<String> delete(@PathVariable Long id) {
         if (!minecraftMod.delete(id)) {

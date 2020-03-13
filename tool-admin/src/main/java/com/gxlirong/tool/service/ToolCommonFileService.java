@@ -2,7 +2,7 @@ package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
-import com.gxlirong.tool.entity.ToolFile;
+import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author lirong
  * @since 2020-03-07
  */
-public interface ToolFileService extends IService<ToolFile> {
+public interface ToolCommonFileService extends IService<ToolCommonFile> {
     /**
      * 获得我的世界模组配置列表
      *
