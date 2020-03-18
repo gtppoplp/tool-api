@@ -67,7 +67,7 @@ public class ToolMinecraftModCategoryServiceImpl extends ServiceImpl<ToolMinecra
                         .eq("name", minecraftModCategoryPostParam.getName())
                         .eq("is_deleted", false)
         ) != 0) {
-            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_CREATE_NAME_REPEAT);
+            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_NAME_REPEAT);
         }
         ToolMinecraftModCategory minecraftModCategory = new ToolMinecraftModCategory();
         BeanUtil.copyProperties(minecraftModCategoryPostParam, minecraftModCategory);
@@ -91,7 +91,7 @@ public class ToolMinecraftModCategoryServiceImpl extends ServiceImpl<ToolMinecra
                         .eq("is_deleted", false)
         );
         if (minecraftModCategory == null) {
-            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_UPDATE_ENTITY_NONE);
+            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_ENTITY_NONE);
         }
         if (this.count(
                 new QueryWrapper<ToolMinecraftModCategory>()
@@ -101,7 +101,7 @@ public class ToolMinecraftModCategoryServiceImpl extends ServiceImpl<ToolMinecra
                         .eq("name", minecraftModCategoryPostParam.getName())
                         .eq("is_deleted", false)
         ) != 0) {
-            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_UPDATE_NAME_REPEAT);
+            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_NAME_REPEAT);
         }
         BeanUtil.copyProperties(minecraftModCategoryPostParam, minecraftModCategory);
         userUtils.updateBefore(minecraftModCategory);

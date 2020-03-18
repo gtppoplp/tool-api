@@ -1,5 +1,6 @@
 package com.gxlirong.tool.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -43,6 +44,21 @@ public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper,
     @Autowired
     private UserUtils userUtils;
 
+    @Override
+    public ToolCommonFile findByToolMinecraftModPermanent(ToolMinecraftMod minecraftMod) {
+        ToolCommonFile file = this.getOne(
+                new QueryWrapper<ToolCommonFile>()
+                        .eq("table_id", minecraftMod.getId())
+                        .eq("entity_name", minecraftMod.getClass().getSimpleName())
+                        .eq("category", ToolMinecraftModFileEnum.CATEGORY_PERMANENT.getCategory())
+                        .eq("is_deleted", false)
+        );
+        if (file == null) {
+            throw new OperationException(ResultCode.MINECRAFT_MOD_FILE_NONE);
+        }
+        return file;
+    }
+
     /**
      * 获得我的世界模组配置列表
      *
@@ -85,7 +101,7 @@ public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper,
     @Override
     public boolean minecraftModCreate(ToolMinecraftMod minecraftMod, String tempPath, String fileName) {
         if (!tempPath.substring(tempPath.lastIndexOf(".") + 1).equals("jar")) {
-            throw new OperationException(ResultCode.MINECRAFT_MOD_CREATE_CATEGORY_FILE_EXTENSION);
+            throw new OperationException(ResultCode.MINECRAFT_MOD_FILE_EXTENSION);
         }
         //移动临时文件到常驻文件夹
         fileUtils.copy(fileUploadProperties.getFileTempPath() + tempPath, fileUploadProperties.getMinecraftFilePath() + fileName);
@@ -188,7 +204,7 @@ public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper,
                 }
             }
             if (enUSFile == null) {
-                throw new OperationException(ResultCode.MINECRAFT_MOD_CREATE_CATEGORY_FILE_NONE_LANG);
+                throw new OperationException(ResultCode.MINECRAFT_MOD_FILE_NONE_LANG);
             }
             //读取数据存入list
             for (ToolMinecraftModLang minecraftModLang : minecraftModLangList) {

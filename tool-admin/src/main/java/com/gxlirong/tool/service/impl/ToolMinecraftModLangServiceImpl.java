@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -87,25 +86,16 @@ public class ToolMinecraftModLangServiceImpl extends ServiceImpl<ToolMinecraftMo
     }
 
     @Override
-    public boolean updateBath(List<ToolMinecraftModLang> langList) {
-        return this.updateBatchById(langList);
-    }
-
-    @Override
-    public void chineseLangList(List<ToolMinecraftModLang> langList) throws InterruptedException {
-        if (langList != null) {
-            for (ToolMinecraftModLang lang : langList) {
-                //开始翻译
-                ChineseTranslate chineseString = chineseUtils.getChineseString(chineseUtils.stringInsertWhitespace(lang.getLang()));
-                String translationString = chineseString.getTrans_result().get(0).getDst();
-                //去空格
-                translationString = translationString.replace(" ", "");
-                //标点符号转小写
-                translationString = chineseUtils.toDBC(translationString);
-                lang.setLang(translationString);
-                lang.setIsChinese(true);
-                log.info("{}", translationString);
-            }
-        }
+    public void chineseLang(ToolMinecraftModLang lang) throws InterruptedException {
+        //开始翻译
+        ChineseTranslate chineseString = chineseUtils.getChineseString("auto", "zh", chineseUtils.stringInsertWhitespace(lang.getLang()));
+        String translationString = chineseString.getTrans_result().get(0).getDst();
+        //去空格
+        translationString = translationString.replace(" ", "");
+        //标点符号转小写
+        translationString = chineseUtils.toDBC(translationString);
+        lang.setLang(translationString);
+        lang.setIsChinese(true);
+        log.info("{}", translationString);
     }
 }

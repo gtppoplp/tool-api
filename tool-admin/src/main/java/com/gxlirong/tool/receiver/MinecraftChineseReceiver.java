@@ -7,6 +7,7 @@ import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.LogEnum;
+import com.gxlirong.tool.enums.ToolMinecraftModChineseEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
 import com.gxlirong.tool.service.ToolCommonFileService;
 import com.gxlirong.tool.service.ToolCommonLogService;
@@ -41,34 +42,29 @@ public class MinecraftChineseReceiver {
 
     @RabbitHandler
     public void handle(Long minecraftModId) {
+        ToolMinecraftMod minecraftMod = null;
         try {
-            ToolMinecraftMod minecraftMod = minecraftModService.getOne(
-                    new QueryWrapper<ToolMinecraftMod>()
-                            .eq("id", minecraftModId)
-                            .eq("is_deleted", false)
-            );
-            if (minecraftMod == null) {
-                throw new OperationException(ResultCode.MINECRAFT_MOD_CHINESE_MOD_NONE);
-            }
-            ToolCommonFile file = fileService.getOne(
-                    new QueryWrapper<ToolCommonFile>()
-                            .eq("table_id", minecraftMod.getId())
-                            .eq("entity_name", minecraftMod.getClass().getSimpleName())
-                            .eq("category", ToolMinecraftModFileEnum.CATEGORY_PERMANENT.getCategory())
-                            .eq("is_deleted", false)
-            );
-            if (file == null) {
-                throw new OperationException(ResultCode.MINECRAFT_MOD_CHINESE_FILE_NONE);
-            }
+            //读取mod
+            minecraftMod = minecraftModService.findById(minecraftModId);
             //获得未汉化的字段
             List<ToolMinecraftModLang> notChineseList = minecraftModLangService.getNotChineseList(minecraftMod.getId());
             if (notChineseList != null) {
-                minecraftModLangService.chineseLangList(notChineseList);
-                if (!minecraftModLangService.updateBath(notChineseList)) {
-                    throw new OperationException(ResultCode.MINECRAFT_MOD_CHINESE_CREATE_CHINESE_ERROR);
+                for (ToolMinecraftModLang notChinese : notChineseList) {
+                    minecraftModLangService.chineseLang(notChinese);
+                    if (!minecraftModLangService.updateById(notChinese)) {
+                        //保存失败
+                        throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_SAVE_ERROR);
+                    }
                 }
             }
+            minecraftMod.setChineseStatus(ToolMinecraftModChineseEnum.CHINESE_STATUS.getChineseComplete());
+            minecraftModService.updateById(minecraftMod);
+            log.error("我的世界汉化字段完成");
         } catch (Exception e) {
+            if (minecraftMod != null) {
+                minecraftMod.setChineseStatus(ToolMinecraftModChineseEnum.CHINESE_STATUS.getChineseFail());
+                minecraftModService.updateById(minecraftMod);
+            }
             //存储日志到数据库,建立关联
             logService.create(LogEnum.LOG_TYPE_ERROR.getType(), minecraftModId, ToolMinecraftMod.class.getSimpleName(), e.getMessage());
             log.error("错误:" + e.getMessage());

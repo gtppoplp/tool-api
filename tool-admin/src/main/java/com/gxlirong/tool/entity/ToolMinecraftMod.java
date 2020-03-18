@@ -3,6 +3,7 @@ package com.gxlirong.tool.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,9 +35,13 @@ public class ToolMinecraftMod extends BaseUser {
     @ApiModelProperty(value = "模组说明", dataType = "String")
     private String description;
 
-    @ApiModelProperty(value = "是否汉化(1:汉化,2:汉化中,3:汉化失败,0:未汉化)", dataType = "Boolean")
-    private Boolean isChinese;
+    @ApiModelProperty(value = "读取lang状态(1:完成,2:提取中,3:提取失败,0:未提取)", dataType = "Integer")
+    private Integer langStatus;
 
-    @ApiModelProperty(value = "是否应用到游戏(1:是,2:错误,3:否)", dataType = "Boolean")
-    private Boolean isEnabled;
+    @ApiModelProperty(value = "汉化状态(1:已汉化,2:汉化中,3:汉化失败,0:未汉化)", dataType = "Integer")
+    private Integer chineseStatus;
+
+    @ApiModelProperty(value = "应用到游戏状态(1:已应用,2:应用中,3:应用失败,0:未应用)", dataType = "Integer")
+    private Integer enabledStatus;
+
 }

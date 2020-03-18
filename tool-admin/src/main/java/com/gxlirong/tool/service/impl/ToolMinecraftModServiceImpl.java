@@ -12,6 +12,8 @@ import com.gxlirong.tool.domain.dto.ToolMinecraftModQueryParam;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModCategory;
 import com.gxlirong.tool.enums.QueueEnum;
+import com.gxlirong.tool.enums.ToolMinecraftModChineseEnum;
+import com.gxlirong.tool.enums.ToolMinecraftModLangEnum;
 import com.gxlirong.tool.mapper.ToolMinecraftModMapper;
 import com.gxlirong.tool.service.ToolCommonFileService;
 import com.gxlirong.tool.service.ToolMinecraftModCategoryService;
@@ -42,9 +44,9 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
     private RabbitTemplate rabbitTemplate;
 
     /**
-     * 列表
+     * 我的世界模组 - 列表
      *
-     * @param minecraftModTypeQueryParam ToolMinecraftModQueryParam
+     * @param minecraftModTypeQueryParam minecraftModTypeQueryParam
      * @return IPage<ToolMinecraftMod>
      */
     @Override
@@ -57,10 +59,24 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
                         .orderByDesc("created_time"));
     }
 
+    @Override
+    public ToolMinecraftMod findById(Long id) {
+        ToolMinecraftMod minecraftMod = this.getOne(
+                new QueryWrapper<ToolMinecraftMod>()
+                        .eq("id", id)
+                        .eq("is_deleted", false)
+        );
+        if (minecraftMod == null) {
+            throw new OperationException(ResultCode.MINECRAFT_MOD_NONE);
+        }
+        return minecraftMod;
+    }
+
+
     /**
-     * 新增
+     * 我的世界模组 - 新增
      *
-     * @param minecraftModTypePostParam ToolMinecraftModPostParam
+     * @param minecraftModTypePostParam minecraftModTypePostParam
      * @return boolean
      */
     @Override
@@ -72,52 +88,99 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
                         .eq("name", minecraftModTypePostParam.getName())
                         .eq("is_deleted", false)
         ) != 0) {
-            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_CREATE_NAME_REPEAT);
+            //重复名字
+            throw new OperationException(ResultCode.MINECRAFT_MOD_NAME_REPEAT);
         }
         if (minecraftModCategoryService.count(
                 new QueryWrapper<ToolMinecraftModCategory>()
                         .eq("id", minecraftModTypePostParam.getCategoryId())
                         .eq("is_deleted", false)
         ) == 0) {
-            throw new OperationException(ResultCode.MINECRAFT_MOD_CREATE_CATEGORY_ID_NONE);
+            //找不到类型
+            throw new OperationException(ResultCode.MINECRAFT_MOD_CATEGORY_ID_NONE);
         }
         ToolMinecraftMod minecraftMod = new ToolMinecraftMod();
         BeanUtil.copyProperties(minecraftModTypePostParam, minecraftMod);
         userUtils.insertBefore(minecraftMod);
-        //测试文件上传
         if (this.save(minecraftMod)) {
             //保存文件到常驻目录
-            if (!fileService.minecraftModCreate(minecraftMod, minecraftModTypePostParam.getPath(), minecraftModTypePostParam.getFileName())) {
-                return false;
-            }
-            //保存对应字段信息
-            rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_LANG_CREATE.getRouteKey(), minecraftMod.getId());
+            return fileService.minecraftModCreate(minecraftMod, minecraftModTypePostParam.getPath(), minecraftModTypePostParam.getFileName());
         }
         return true;
     }
 
+    /**
+     * 我的世界模组 - 汉化
+     *
+     * @param id id
+     * @return boolean
+     */
     @Override
     public boolean chinese(Long id) {
-        //通知汉化
-        rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_CHINESE.getRouteKey(), id);
-        return true;
+        ToolMinecraftMod minecraftMod = this.getOne(
+                new QueryWrapper<ToolMinecraftMod>()
+                        .eq("id", id)
+                        .eq("is_deleted", false)
+        );
+        if (minecraftMod == null) {
+            //模型不存在
+            throw new OperationException(ResultCode.MINECRAFT_MOD_NONE);
+        }
+        if (!minecraftMod.getLangStatus().equals(ToolMinecraftModLangEnum.LANG_STATUS.getLangComplete())) {
+            //字段未读取完成就汉化
+            throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_NOT_COMPLETE);
+        }
+        if (minecraftMod.getChineseStatus().equals(ToolMinecraftModChineseEnum.CHINESE_STATUS.getChineseWorking())) {
+            //汉化进行中
+            throw new OperationException(ResultCode.MINECRAFT_MOD_CHINESE_IS_WORKING);
+        }
+        minecraftMod.setChineseStatus(ToolMinecraftModChineseEnum.CHINESE_STATUS.getChineseWorking());
+        userUtils.updateBefore(minecraftMod);
+        if (this.updateById(minecraftMod)) {
+            rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_CHINESE.getRouteKey(), id);
+            return true;
+        }
+        return false;
     }
 
 
+    /**
+     * 我的世界模组 - 删除
+     *
+     * @param id id
+     * @return boolean
+     */
     @Override
     public boolean delete(Long id) {
         return false;
     }
 
+    /**
+     * 我的世界模组 - 更新
+     *
+     * @param id id
+     * @return boolean
+     */
     @Override
     public boolean update(Long id, ToolMinecraftModPostParam minecraftModTypePostParam) {
         return false;
     }
 
+    /**
+     * 我的世界模组 - 读取lang
+     *
+     * @param id id
+     * @return boolean
+     */
     @Override
     public boolean lang(Long id) {
-        //保存对应字段信息
-        rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_LANG_CREATE.getRouteKey(), id);
-        return true;
+        ToolMinecraftMod minecraftMod = this.getOne(new QueryWrapper<ToolMinecraftMod>().eq("id", id).eq("is_deleted", false));
+        minecraftMod.setLangStatus(ToolMinecraftModLangEnum.LANG_STATUS.getLangWorking());
+        userUtils.updateBefore(minecraftMod);
+        if (this.updateById(minecraftMod)) {
+            rabbitTemplate.convertAndSend(QueueEnum.QUEUE_MINECRAFT_LANG_CREATE.getRouteKey(), id);
+            return true;
+        }
+        return false;
     }
 }

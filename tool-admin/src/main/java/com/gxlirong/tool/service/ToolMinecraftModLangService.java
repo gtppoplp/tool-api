@@ -15,6 +15,12 @@ import java.util.List;
  */
 public interface ToolMinecraftModLangService extends IService<ToolMinecraftModLang> {
 
+    /**
+     * 我的世界模组lang 获得未汉化列表
+     *
+     * @param id id
+     * @return List<ToolMinecraftModLang>
+     */
     List<ToolMinecraftModLang> getNotChineseList(Long id);
 
     List<ToolMinecraftModLang> getChineseList(Long id);
@@ -30,18 +36,10 @@ public interface ToolMinecraftModLangService extends IService<ToolMinecraftModLa
     boolean createBath(Long id, List<String> enUSStringList, List<String> zhCNStringList);
 
     /**
-     * 批量更新lang
-     *
-     * @param langList langList
-     * @return boolean
-     */
-    boolean updateBath(List<ToolMinecraftModLang> langList);
-
-    /**
-     * 汉化字段列表
+     * 汉化字段
      *
      * @param langList langList
      * @throws InterruptedException InterruptedException
      */
-    void chineseLangList(List<ToolMinecraftModLang> langList) throws InterruptedException;
+    void chineseLang(ToolMinecraftModLang langList) throws InterruptedException;
 }

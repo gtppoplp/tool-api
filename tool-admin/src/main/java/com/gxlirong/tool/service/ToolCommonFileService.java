@@ -18,6 +18,15 @@ import java.util.List;
  * @since 2020-03-07
  */
 public interface ToolCommonFileService extends IService<ToolCommonFile> {
+
+    /**
+     * 获得我的世界常驻附件
+     *
+     * @param minecraftMod minecraftMod
+     * @return ToolCommonFile
+     */
+    ToolCommonFile findByToolMinecraftModPermanent(ToolMinecraftMod minecraftMod);
+
     /**
      * 获得我的世界模组配置列表
      *

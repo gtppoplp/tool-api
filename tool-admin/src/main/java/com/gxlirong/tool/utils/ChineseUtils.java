@@ -36,11 +36,11 @@ public class ChineseUtils {
      * @param english 英文字符串
      * @return 汉化响应实体
      */
-    public ChineseTranslate getChineseString(String english) throws InterruptedException {
+    public ChineseTranslate getChineseString(String from, String to, String english) throws InterruptedException {
         Map<String, String> params = new HashMap<>();
         params.put("q", english);
-        params.put("from", "en");
-        params.put("to", "zh");
+        params.put("from", from);
+        params.put("to", to);
         params.put("appid", appid);
         // 随机数
         String salt = String.valueOf(System.currentTimeMillis());
