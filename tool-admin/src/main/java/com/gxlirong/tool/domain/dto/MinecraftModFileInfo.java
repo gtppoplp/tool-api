@@ -1,5 +1,6 @@
 package com.gxlirong.tool.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author lirong
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)//忽略多余的字段
 public class MinecraftModFileInfo {
     @ApiModelProperty("包名")
     private String modid;
@@ -26,6 +28,8 @@ public class MinecraftModFileInfo {
     private String url;
     @ApiModelProperty("更新url")
     private String updateUrl;
+    @ApiModelProperty("作者列表")
+    private List<String> authors;
     @ApiModelProperty("作者列表")
     private List<String> authorList;
     @ApiModelProperty("工作人员")

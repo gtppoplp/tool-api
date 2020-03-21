@@ -49,11 +49,20 @@ public class ToolMinecraftModInfoServiceImpl extends ServiceImpl<ToolMinecraftMo
             toolMinecraftModInfo.setMcversion(minecraftModFile.getMcversion());
             toolMinecraftModInfo.setUrl(minecraftModFile.getUrl());
             toolMinecraftModInfo.setUpdateUrl(minecraftModFile.getUpdateUrl());
-            toolMinecraftModInfo.setAuthorList(String.join(",", minecraftModFile.getAuthorList()));
+            if (minecraftModFile.getAuthors() != null) {
+                toolMinecraftModInfo.setAuthorList(String.join(",", minecraftModFile.getAuthors()));
+            }
+            if (minecraftModFile.getAuthorList() != null) {
+                toolMinecraftModInfo.setAuthorList(String.join(",", minecraftModFile.getAuthorList()));
+            }
             toolMinecraftModInfo.setCredits(minecraftModFile.getCredits());
             toolMinecraftModInfo.setLogoFile(minecraftModFile.getLogoFile());
-            toolMinecraftModInfo.setScreenshots(String.join(",", minecraftModFile.getScreenshots()));
-            toolMinecraftModInfo.setDependencies(String.join(",", minecraftModFile.getDescription()));
+            if (minecraftModFile.getScreenshots() != null) {
+                toolMinecraftModInfo.setScreenshots(String.join(",", minecraftModFile.getScreenshots()));
+            }
+            if (minecraftModFile.getScreenshots() != null) {
+                toolMinecraftModInfo.setDependencies(String.join(",", minecraftModFile.getDependencies()));
+            }
             minecraftModInfoList.add(toolMinecraftModInfo);
         }
         return this.saveBatch(minecraftModInfoList);

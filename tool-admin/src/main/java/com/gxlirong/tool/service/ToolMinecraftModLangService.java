@@ -1,6 +1,7 @@
 package com.gxlirong.tool.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gxlirong.tool.domain.dto.ToolMinecraftModLangPostParam;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 
 import java.util.List;
@@ -23,8 +24,6 @@ public interface ToolMinecraftModLangService extends IService<ToolMinecraftModLa
      */
     List<ToolMinecraftModLang> getNotChineseList(Long id);
 
-    List<ToolMinecraftModLang> getChineseList(Long id);
-
     /**
      * 我的世界模组lang字段批量创建
      *
@@ -42,4 +41,22 @@ public interface ToolMinecraftModLangService extends IService<ToolMinecraftModLa
      * @throws InterruptedException InterruptedException
      */
     void chineseLang(ToolMinecraftModLang langList) throws InterruptedException;
+
+    /**
+     * 我的世界模组 - lang内容所有列表
+     *
+     * @param id id
+     * @return List<ToolMinecraftModLang>
+     */
+    List<ToolMinecraftModLang> getList(Long id);
+
+    /**
+     * 我的世界模组 - 修改lang内容
+     *
+     * @param id                        id
+     * @param minecraftModTypePostParam minecraftModTypePostParam
+     * @return boolean
+     */
+    boolean update(Long id, ToolMinecraftModLangPostParam minecraftModTypePostParam);
+
 }

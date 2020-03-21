@@ -7,21 +7,24 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
+import com.gxlirong.tool.domain.dto.ToolMinecraftModLangPostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModPostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModQueryParam;
+import com.gxlirong.tool.entity.ToolCommonLog;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModCategory;
+import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.QueueEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModChineseEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModLangEnum;
 import com.gxlirong.tool.mapper.ToolMinecraftModMapper;
-import com.gxlirong.tool.service.ToolCommonFileService;
-import com.gxlirong.tool.service.ToolMinecraftModCategoryService;
-import com.gxlirong.tool.service.ToolMinecraftModService;
+import com.gxlirong.tool.service.*;
 import com.gxlirong.tool.utils.UserUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -42,6 +45,10 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
     private ToolCommonFileService fileService;
     @Autowired
     private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private ToolCommonLogService commonLogService;
+    @Autowired
+    private ToolMinecraftModLangService minecraftModLangService;
 
     /**
      * 我的世界模组 - 列表
@@ -55,6 +62,10 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
                 new Page<>(minecraftModTypeQueryParam.getPageNum(), minecraftModTypeQueryParam.getPageSize()),
                 new QueryWrapper<ToolMinecraftMod>()
                         .like(minecraftModTypeQueryParam.getName() != null, "name", minecraftModTypeQueryParam.getName())
+                        .like(minecraftModTypeQueryParam.getCategoryId() != null, "category_id", minecraftModTypeQueryParam.getCategoryId())
+                        .like(minecraftModTypeQueryParam.getLangStatus() != null, "lang_status", minecraftModTypeQueryParam.getLangStatus())
+                        .like(minecraftModTypeQueryParam.getChineseStatus() != null, "chinese_status", minecraftModTypeQueryParam.getChineseStatus())
+                        .like(minecraftModTypeQueryParam.getEnabledStatus() != null, "enabled_status", minecraftModTypeQueryParam.getEnabledStatus())
                         .eq("is_deleted", false)
                         .orderByDesc("created_time"));
     }
@@ -182,5 +193,38 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
             return true;
         }
         return false;
+    }
+
+    /**
+     * 我的世界模组 - 读取错误日志
+     *
+     * @param id id
+     * @return List<ToolCommonLog>
+     */
+    @Override
+    public List<ToolCommonLog> getLogList(Long id) {
+        return commonLogService.getList(id, ToolMinecraftMod.class.getSimpleName());
+    }
+
+    /**
+     * 我的世界模组 - lang内容所有列表
+     *
+     * @param id id
+     * @return List<ToolMinecraftModLang>
+     */
+    @Override
+    public List<ToolMinecraftModLang> getLangList(Long id) {
+        return minecraftModLangService.getList(id);
+    }
+
+    /**
+     * 我的世界模组 - 编辑lang内容
+     *
+     * @param minecraftModTypePostParam minecraftModTypePostParam
+     * @return boolean
+     */
+    @Override
+    public boolean updateLang(Long id, ToolMinecraftModLangPostParam minecraftModTypePostParam) {
+        return minecraftModLangService.update(id, minecraftModTypePostParam);
     }
 }

@@ -28,12 +28,6 @@ public class ToolMinecraftModCategoryController {
         return CommonResult.success(CommonPage.restPage(minecraftModTypeService.getList(minecraftModTypeQueryParam)));
     }
 
-    @ApiOperation("所有列表")
-    @GetMapping("/all")
-    public CommonResult<List<ToolMinecraftModCategory>> all() {
-        return CommonResult.success(minecraftModTypeService.getAll());
-    }
-
     @ApiOperation("新增")
     @PostMapping
     @Transactional

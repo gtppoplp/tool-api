@@ -1,15 +1,11 @@
 package com.gxlirong.tool.receiver;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
-import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.LogEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModChineseEnum;
-import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
-import com.gxlirong.tool.service.ToolCommonFileService;
 import com.gxlirong.tool.service.ToolCommonLogService;
 import com.gxlirong.tool.service.ToolMinecraftModLangService;
 import com.gxlirong.tool.service.ToolMinecraftModService;
@@ -30,9 +26,6 @@ import java.util.List;
 @RabbitListener(queues = "mod.minecraft.chinese")
 @Slf4j
 public class MinecraftChineseReceiver {
-
-    @Autowired
-    private ToolCommonFileService fileService;
     @Autowired
     private ToolMinecraftModService minecraftModService;
     @Autowired
@@ -61,13 +54,18 @@ public class MinecraftChineseReceiver {
             minecraftModService.updateById(minecraftMod);
             log.error("我的世界汉化字段完成");
         } catch (Exception e) {
-            if (minecraftMod != null) {
-                minecraftMod.setChineseStatus(ToolMinecraftModChineseEnum.CHINESE_STATUS.getChineseFail());
-                minecraftModService.updateById(minecraftMod);
+            try {
+                if (minecraftMod != null) {
+                    minecraftMod.setChineseStatus(ToolMinecraftModChineseEnum.CHINESE_STATUS.getChineseFail());
+                    minecraftModService.updateById(minecraftMod);
+                }
+                //存储日志到数据库,建立关联
+                logService.create(LogEnum.LOG_TYPE_ERROR.getType(), minecraftModId, ToolMinecraftMod.class.getSimpleName(), e.getMessage());
+                log.error("错误:" + e.getMessage());
+            } catch (Exception t) {
+                t.printStackTrace();
             }
-            //存储日志到数据库,建立关联
-            logService.create(LogEnum.LOG_TYPE_ERROR.getType(), minecraftModId, ToolMinecraftMod.class.getSimpleName(), e.getMessage());
-            log.error("错误:" + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

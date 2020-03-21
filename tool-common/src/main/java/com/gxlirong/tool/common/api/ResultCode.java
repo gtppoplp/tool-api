@@ -29,7 +29,8 @@ public enum ResultCode implements IErrorCode {
     MINECRAFT_MOD_LANG_SAVE_ERROR(40107, "汉化字段保存失败"),
     MINECRAFT_MOD_INFO_SAVE_ERROR(40108, "模型信息保存失败"),
     MINECRAFT_MOD_FILE_NONE_LANG(40109, "文件中不存在lang文件"),
-    MINECRAFT_MOD_FILE_EXTENSION(40110, "文件类型错误");
+    MINECRAFT_MOD_FILE_EXTENSION(40110, "文件类型错误"),
+    MINECRAFT_MOD_LANG_NONE(40111, "lang内容不存在");
 
     private int code;
     private String message;

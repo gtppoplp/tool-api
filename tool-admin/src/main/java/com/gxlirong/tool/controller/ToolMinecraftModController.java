@@ -2,9 +2,14 @@ package com.gxlirong.tool.controller;
 
 import com.gxlirong.tool.common.api.CommonPage;
 import com.gxlirong.tool.common.api.CommonResult;
+import com.gxlirong.tool.domain.dto.ToolMinecraftModLangPostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModPostParam;
 import com.gxlirong.tool.domain.dto.ToolMinecraftModQueryParam;
+import com.gxlirong.tool.entity.ToolCommonLog;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
+import com.gxlirong.tool.entity.ToolMinecraftModCategory;
+import com.gxlirong.tool.entity.ToolMinecraftModLang;
+import com.gxlirong.tool.service.ToolMinecraftModCategoryService;
 import com.gxlirong.tool.service.ToolMinecraftModService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,12 +18,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = "游戏-我的世界-模组")
 @RestController
 @RequestMapping("/minecraft/mod")
 public class ToolMinecraftModController {
     @Autowired
     private ToolMinecraftModService minecraftMod;
+    @Autowired
+    private ToolMinecraftModCategoryService minecraftModTypeService;
 
     @ApiOperation("列表")
     @GetMapping
@@ -34,6 +43,24 @@ public class ToolMinecraftModController {
             return CommonResult.failed("新增模组失败!");
         }
         return CommonResult.success("新增模组成功!");
+    }
+
+    @ApiOperation("所有列表")
+    @GetMapping("/mod-category/all")
+    public CommonResult<List<ToolMinecraftModCategory>> modCategoryAll() {
+        return CommonResult.success(minecraftModTypeService.getAll());
+    }
+
+    @ApiOperation("日志所有列表")
+    @GetMapping("/log/all/{id}")
+    public CommonResult<List<ToolCommonLog>> modLogAll(@PathVariable Long id) {
+        return CommonResult.success(minecraftMod.getLogList(id));
+    }
+
+    @ApiOperation("lang内容所有列表")
+    @GetMapping("/lang/all/{id}")
+    public CommonResult<List<ToolMinecraftModLang>> modLangAll(@PathVariable Long id) {
+        return CommonResult.success(minecraftMod.getLangList(id));
     }
 
     @ApiOperation("通知读取lang")
@@ -54,6 +81,18 @@ public class ToolMinecraftModController {
             return CommonResult.failed("通知汉化失败!");
         }
         return CommonResult.success("通知汉化成功!");
+    }
+
+    @ApiOperation("编辑lang内容")
+    @PutMapping("/lang/{id}")
+    @Transactional
+    public CommonResult<String> updateLang(@ApiParam(name = "id", value = "lang标识", required = true)
+                                           @PathVariable Long id,
+                                           @RequestBody ToolMinecraftModLangPostParam minecraftModTypePostParam) {
+        if (!minecraftMod.updateLang(id, minecraftModTypePostParam)) {
+            return CommonResult.failed("修改lang失败!");
+        }
+        return CommonResult.success("修改lang成功!");
     }
 
     @ApiOperation("编辑")

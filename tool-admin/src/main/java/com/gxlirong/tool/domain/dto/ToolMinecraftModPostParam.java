@@ -22,6 +22,7 @@ public class ToolMinecraftModPostParam {
 
     @ApiModelProperty(value = "是否应用到游戏", dataType = "Boolean")
     private Boolean isEnabled = false;
+
     @ApiModelProperty(value = "文件路径", dataType = "String")
     private String path;
     @ApiModelProperty(value = "真实文件名", dataType = "String")

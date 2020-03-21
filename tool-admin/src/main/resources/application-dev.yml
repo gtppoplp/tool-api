@@ -1,6 +1,6 @@
 # 开发环境
 server:
-  port: 9001
+  port: 9002
 spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/tool_gxlirong_com?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
@@ -35,6 +35,7 @@ spring:
     port: 5672
     username: admin
     password: a59360b37f20bb9ce22710a4ff3a2b6fff5aff51b3ac1aa989687d59fcecbb83
+
 customize:
   file:
     upload:
