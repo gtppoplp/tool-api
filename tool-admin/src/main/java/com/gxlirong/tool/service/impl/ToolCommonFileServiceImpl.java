@@ -2,16 +2,17 @@ package com.gxlirong.tool.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
+import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.properties.FileUploadProperties;
 import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
-import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.ToolMinecraftModFileEnum;
 import com.gxlirong.tool.mapper.ToolCommonFileMapper;
 import com.gxlirong.tool.service.ToolCommonFileService;
@@ -24,7 +25,9 @@ import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -60,16 +63,68 @@ public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper,
     }
 
     /**
+     * 遍历节点获得指定key值
+     * 如果是列表,则用逗号隔开返回值
+     *
+     * @param node 节点
+     * @param key  key
+     * @return string
+     */
+    public String jsonLeaf(JsonNode node, String key) {
+        //如果是值
+        if (node.isValueNode() && key == null) {
+            return node.toString();
+        }
+        //如果是对象
+        if (node.isObject()) {
+            Iterator<Map.Entry<String, JsonNode>> it = node.fields();
+            StringBuilder string = new StringBuilder();
+            while (it.hasNext()) {
+                Map.Entry<String, JsonNode> entry = it.next();
+                if (entry.getKey().equals(key)) {
+                    string.append(jsonLeaf(entry.getValue(), null));
+                } else {
+                    string.append(jsonLeaf(entry.getValue(), key));
+                }
+            }
+            return string.toString().replaceAll("\"(\\w+)\"", "$1");
+        }
+        //如果是数组则输出
+        if (node.isArray()) {
+            StringBuilder string = new StringBuilder();
+            for (JsonNode jsonNode : node) {
+                String s = jsonLeaf(jsonNode, key);
+                if (s != null && !s.equals("")) {
+                    string.append(s).append(",");
+                }
+            }
+            if (string.length() != 0) {
+                return string.substring(0, string.length() - 1);
+            }
+        }
+        return "";
+    }
+
+    /**
      * 获得我的世界模组配置列表
      *
      * @param path 路径
      * @return 我的世界模组配置列表
      */
-    public List<MinecraftModFileInfo> getMinecraftModFileInfo(String path) throws IOException {
+    public MinecraftModFileInfo getMinecraftModFileInfo(String path) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-        return objectMapper.readValue(new File(path + "/mcmod.info"), new TypeReference<List<MinecraftModFileInfo>>() {
-        });
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        JsonNode root = objectMapper.readTree(new File(path + "/mcmod.info"));
+        MinecraftModFileInfo minecraftModFileInfo = new MinecraftModFileInfo();
+        minecraftModFileInfo.setModid(this.jsonLeaf(root, "modid"));
+        minecraftModFileInfo.setName(this.jsonLeaf(root, "name"));
+        minecraftModFileInfo.setDescription(this.jsonLeaf(root, "description"));
+        minecraftModFileInfo.setVersion(this.jsonLeaf(root, "version"));
+        minecraftModFileInfo.setMcversion(this.jsonLeaf(root, "mcversion"));
+        minecraftModFileInfo.setUrl(this.jsonLeaf(root, "url"));
+        minecraftModFileInfo.setAuthorList(this.jsonLeaf(root, "authorList"));
+        minecraftModFileInfo.setDependencies(this.jsonLeaf(root, "dependencies"));
+        return minecraftModFileInfo;
     }
 
 
@@ -125,28 +180,27 @@ public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper,
     }
 
     /**
-     * 我的世界mod从附件解压并获取狼lang内容
+     * 我的世界mod从附件中读取lang路径
      *
      * @param filePath     常驻附件位置
      * @param langFileName lang文件名
      * @return 返回内容行
      */
-    @Override
-    public List<String> minecraftModLangFromFilePath(String filePath, String langFileName) {
+    private String getLangPath(String filePath, String langFileName) {
         //查找lang后缀文件名
         List<File> langFileList = fileUtils.searchExtension(new File(filePath), "lang");
         try {
             //读取正确的文件
             //读取文件夹下modId.info文件中的json值modId,匹配改路径下的en_us.lang
-            List<MinecraftModFileInfo> minecraftModFileInfo = this.getMinecraftModFileInfo(filePath);
+            MinecraftModFileInfo minecraftModFileInfo = this.getMinecraftModFileInfo(filePath);
             String modId = "";
-            if (!minecraftModFileInfo.isEmpty()) {
-                modId = "\\" + minecraftModFileInfo.get(0).getModid() + "\\";
+            if (minecraftModFileInfo != null) {
+                modId = "\\" + minecraftModFileInfo.getModid() + "\\";
             }
             for (File langFile : langFileList) {
                 if (langFile.getName().toLowerCase().equals(langFileName) && langFile.getPath().contains(modId)) {
                     //读取数据存入list
-                    return fileUtils.readerFileStringList(langFile.getPath());
+                    return langFile.getPath();
                 }
             }
             return null;
@@ -154,6 +208,46 @@ public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper,
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 我的世界mod从附件解压并获取狼lang内容
+     *
+     * @param filePath     常驻附件位置
+     * @param langFileName lang文件名
+     * @return 返回内容行
+     */
+    @Override
+    public List<String> minecraftModLangFromFilePath(String filePath, String langFileName) throws IOException {
+        return fileUtils.readerFileStringList(this.getLangPath(filePath, langFileName));
+    }
+
+    /**
+     * 我的世界mod将汉化内容写入到汉化文件
+     *
+     * @param notChineseList notChineseList
+     * @param filePathName   文件夹名称
+     */
+    @Override
+    public void minecraftModPackageEnLangFromChineseList(List<ToolMinecraftModLang> notChineseList, String filePathName) {
+        try {
+            String langPath = this.getLangPath(filePathName, "en_us.lang");
+            if (langPath == null) {
+                throw new RuntimeException();
+            }
+            langPath = langPath.replace("en_us.lang", "zh_cn.lang");
+            List<String> zhCNStringList = new ArrayList<>();
+            //读取数据存入list
+            for (ToolMinecraftModLang minecraftModLang : notChineseList) {
+                zhCNStringList.add(minecraftModLang.getField() + "=" + minecraftModLang.getLang());
+            }
+            //将汉化内容写入文件
+            if (!fileUtils.writerFileStringList(zhCNStringList, langPath)) {
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -177,53 +271,15 @@ public class ToolCommonFileServiceImpl extends ServiceImpl<ToolCommonFileMapper,
     /**
      * 我的世界mod将汉化内容打包到jar
      *
-     * @param minecraftModLangList 汉化内容列表
-     * @param path                 文件名(不带路径)
-     * @return 是否成功
+     * @param path 文件名(完整路径,包括后缀)
      */
     @Override
-    public boolean minecraftModPackageFromLang(List<ToolMinecraftModLang> minecraftModLangList, String path) {
-        try {
-            File enUSFile = null;
-            List<String> zhCNStringList = new ArrayList<>();
-            //读取jar文件目录
-            String extractFolder = fileUploadProperties.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."));
-            //查找lang后缀文件名
-            List<File> langFileList = fileUtils.searchExtension(new File(
-                    fileUploadProperties.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."))), "lang"
-            );
-            //读取正确的文件->读取文件夹下modId.info文件中的json值modId,匹配改路径下的en_us.lang
-            List<MinecraftModFileInfo> minecraftModFileInfo = this.getMinecraftModFileInfo(extractFolder);
-            String modId = "";
-            if (!minecraftModFileInfo.isEmpty()) {
-                modId = "\\" + minecraftModFileInfo.get(0).getModid() + "\\";
-            }
-            for (File langFile : langFileList) {
-                if (langFile.getName().toLowerCase().equals("en_us.lang") && langFile.getPath().contains(modId)) {
-                    enUSFile = langFile;
-                }
-            }
-            if (enUSFile == null) {
-                throw new OperationException(ResultCode.MINECRAFT_MOD_FILE_NONE_LANG);
-            }
-            //读取数据存入list
-            for (ToolMinecraftModLang minecraftModLang : minecraftModLangList) {
-                zhCNStringList.add(minecraftModLang.getField() + "=" + minecraftModLang.getLang());
-            }
-            //将汉化内容写入文件
-            if (!fileUtils.writerFileStringList(zhCNStringList, enUSFile.getParentFile() + "/zh_cn.lang")) {
-                throw new RuntimeException();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void minecraftModPackageFromPath(String path) {
         //重新打包并移动到常驻文件夹
         ZipUtil.pack(
-                new File(fileUploadProperties.getMinecraftFilePath() + path.substring(0, path.lastIndexOf("."))),
-                new File(fileUploadProperties.getMinecraftFilePath() + path)
+                new File(path.substring(0, path.lastIndexOf("."))),
+                new File(path)
         );
         log.info("重新打包并移动到常驻文件夹完成");
-        return true;
     }
 }

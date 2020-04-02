@@ -26,7 +26,7 @@ public class ToolMinecraftModInfo {
     private Long minecraftModId;
 
     @ApiModelProperty(value = "包名")
-    private String modid;
+    private String modId;
 
     @ApiModelProperty(value = "模组名")
     private String name;
@@ -38,28 +38,14 @@ public class ToolMinecraftModInfo {
     private String version;
 
     @ApiModelProperty(value = "我的世界版本")
-    private String mcversion;
+    private String mcVersion;
 
     @ApiModelProperty(value = "url")
     private String url;
 
-    @ApiModelProperty(value = "更新url")
-    @TableField("updateUrl")
-    private String updateUrl;
-
     @ApiModelProperty(value = "作者列表(json)")
     @TableField("authorList")
     private String authorList;
-
-    @ApiModelProperty(value = "工作人员")
-    private String credits;
-
-    @ApiModelProperty(value = "logo附件")
-    @TableField("logoFile")
-    private String logoFile;
-
-    @ApiModelProperty(value = "截图(json)")
-    private String screenshots;
 
     @ApiModelProperty(value = "依赖(json)")
     private String dependencies;

@@ -66,6 +66,12 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
                         .like(minecraftModTypeQueryParam.getLangStatus() != null, "lang_status", minecraftModTypeQueryParam.getLangStatus())
                         .like(minecraftModTypeQueryParam.getChineseStatus() != null, "chinese_status", minecraftModTypeQueryParam.getChineseStatus())
                         .like(minecraftModTypeQueryParam.getEnabledStatus() != null, "enabled_status", minecraftModTypeQueryParam.getEnabledStatus())
+                        .eq((minecraftModTypeQueryParam.getName() != null ||
+                                minecraftModTypeQueryParam.getCategoryId() != null ||
+                                minecraftModTypeQueryParam.getLangStatus() != null ||
+                                minecraftModTypeQueryParam.getChineseStatus() != null ||
+                                minecraftModTypeQueryParam.getEnabledStatus() != null
+                        ), "unable_chinese", false)
                         .eq("is_deleted", false)
                         .orderByDesc("created_time"));
     }
@@ -226,5 +232,30 @@ public class ToolMinecraftModServiceImpl extends ServiceImpl<ToolMinecraftModMap
     @Override
     public boolean updateLang(Long id, ToolMinecraftModLangPostParam minecraftModTypePostParam) {
         return minecraftModLangService.update(id, minecraftModTypePostParam);
+    }
+
+    /**
+     * 我的世界模组 - 标记为无法汉化
+     *
+     * @param id id
+     * @return boolean
+     */
+    @Override
+    public boolean unableChinese(Long id) {
+        ToolMinecraftMod minecraftMod = this.getOne(
+                new QueryWrapper<ToolMinecraftMod>()
+                        .eq("id", id)
+                        .eq("is_deleted", false)
+        );
+        if (minecraftMod == null) {
+            //模型不存在
+            throw new OperationException(ResultCode.MINECRAFT_MOD_NONE);
+        }
+        //只有读取lang提取失败的情况才可设置为无法汉化
+        if (!minecraftMod.getLangStatus().equals(ToolMinecraftModLangEnum.LANG_STATUS.getLangFail())) {
+            throw new OperationException(ResultCode.MINECRAFT_MOD_LANG_NOT_FAIL);
+        }
+        minecraftMod.setUnableChinese(true);
+        return this.updateById(minecraftMod);
     }
 }

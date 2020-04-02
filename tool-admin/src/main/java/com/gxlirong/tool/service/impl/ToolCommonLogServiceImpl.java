@@ -7,6 +7,7 @@ import com.gxlirong.tool.mapper.ToolCommonLogMapper;
 import com.gxlirong.tool.service.ToolCommonLogService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -51,6 +52,7 @@ public class ToolCommonLogServiceImpl extends ServiceImpl<ToolCommonLogMapper, T
         toolCommonLog.setTableId(id);
         toolCommonLog.setEntityName(entityName);
         toolCommonLog.setLog(log);
+        toolCommonLog.setCreatedTime(LocalDateTime.now());
         this.save(toolCommonLog);
     }
 }

@@ -1,6 +1,9 @@
 package com.gxlirong.tool.utils;
 
+import com.gxlirong.tool.common.api.ResultCode;
+import com.gxlirong.tool.common.exception.OperationException;
 import com.gxlirong.tool.domain.dto.ChineseTranslate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,6 +23,7 @@ import java.util.Map;
  * @author lirong
  */
 @Component
+@Slf4j
 public class ChineseUtils {
     @Autowired
     private HttpUtils httpUtils;
@@ -37,6 +41,9 @@ public class ChineseUtils {
      * @return 汉化响应实体
      */
     public ChineseTranslate getChineseString(String from, String to, String english) throws InterruptedException {
+        if (english == null || english.isEmpty()) {
+            return null;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("q", english);
         params.put("from", from);
@@ -56,14 +63,17 @@ public class ChineseUtils {
 
         ChineseTranslate chineseTranslate = null;
         int max = ChineseUtils.max;
+        String urlWithQueryString = "";
         do {
             Thread.sleep(millis);
             try {
-                chineseTranslate = restTemplate.getForObject(httpUtils.getUrlWithQueryString(TRANS_API_HOST, params), ChineseTranslate.class);
-            } catch (Exception ignored) {
+                urlWithQueryString = httpUtils.getUrlWithQueryString(TRANS_API_HOST, params);
+                chineseTranslate = restTemplate.getForObject(urlWithQueryString, ChineseTranslate.class);
+            } catch (Exception e) {
+                urlWithQueryString = ",error:" + e.getMessage();
             }
             if (max == 0) {
-                throw new RuntimeException();
+                throw new OperationException(ResultCode.MINECRAFT_MOD_CHINESE_MAX_RETRY, urlWithQueryString);
             }
             max--;
         } while (chineseTranslate == null || chineseTranslate.getFrom() == null);

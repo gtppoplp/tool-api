@@ -116,4 +116,16 @@ public class ToolMinecraftModController {
         }
         return CommonResult.success("删除模组成功!");
     }
+
+    @ApiOperation("标记为无法汉化")
+    @PutMapping("/unable/chinese/{id}")
+    @Transactional
+    public CommonResult<String> unableChinese(@ApiParam(name = "id", value = "模组标识", required = true)
+                                              @PathVariable Long id
+    ) {
+        if (!minecraftMod.unableChinese(id)) {
+            return CommonResult.failed("标记为无法汉化模组失败!");
+        }
+        return CommonResult.success("标记为无法汉化模组成功!");
+    }
 }

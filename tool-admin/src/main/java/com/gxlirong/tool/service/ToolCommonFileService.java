@@ -33,7 +33,7 @@ public interface ToolCommonFileService extends IService<ToolCommonFile> {
      * @param path 路径(文件夹路径,需要解压之后的)
      * @return 我的世界模组配置列表
      */
-    List<MinecraftModFileInfo> getMinecraftModFileInfo(String path) throws IOException;
+    MinecraftModFileInfo getMinecraftModFileInfo(String path) throws IOException;
 
     /**
      * 我的世界mod文件创建
@@ -60,16 +60,22 @@ public interface ToolCommonFileService extends IService<ToolCommonFile> {
      * @param langFileName lang文件名
      * @return 返回内容行
      */
-    List<String> minecraftModLangFromFilePath(String filePath, String langFileName);
+    List<String> minecraftModLangFromFilePath(String filePath, String langFileName) throws IOException;
+
+    /**
+     * 我的世界mod将汉化内容写入到汉化文件
+     *
+     * @param notChineseList notChineseList
+     * @param filePathName  文件夹名称
+     */
+    void minecraftModPackageEnLangFromChineseList(List<ToolMinecraftModLang> notChineseList, String filePathName);
 
     /**
      * 我的世界mod将汉化内容打包到jar
      *
-     * @param minecraftModLangList 汉化内容列表
-     * @param path                 文件名(不带路径)
-     * @return 是否成功
+     * @param path 文件名(完整路径,包括后缀)
      */
-    boolean minecraftModPackageFromLang(List<ToolMinecraftModLang> minecraftModLangList, String path);
+    void minecraftModPackageFromPath(String path);
 
     /**
      * 我的世界mod复制mod到游戏目录

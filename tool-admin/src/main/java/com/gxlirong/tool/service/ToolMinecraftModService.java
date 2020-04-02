@@ -96,8 +96,16 @@ public interface ToolMinecraftModService extends IService<ToolMinecraftMod> {
     /**
      * 我的世界模组 - 编辑lang内容
      *
+     * @param id id
      * @param minecraftModTypePostParam minecraftModTypePostParam
      * @return boolean
      */
     boolean updateLang(Long id, ToolMinecraftModLangPostParam minecraftModTypePostParam);
+
+    /**
+     * 我的世界模组 - 标记为无法汉化
+     * @param id id
+     * @return boolean
+     */
+    boolean unableChinese(Long id);
 }

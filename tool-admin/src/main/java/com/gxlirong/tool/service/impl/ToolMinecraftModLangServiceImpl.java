@@ -103,14 +103,16 @@ public class ToolMinecraftModLangServiceImpl extends ServiceImpl<ToolMinecraftMo
     public void chineseLang(ToolMinecraftModLang lang) throws InterruptedException {
         //开始翻译
         ChineseTranslate chineseString = chineseUtils.getChineseString("auto", "zh", chineseUtils.stringInsertWhitespace(lang.getLang()));
-        String translationString = chineseString.getTrans_result().get(0).getDst();
-        //去空格
-        translationString = translationString.replace(" ", "");
-        //标点符号转小写
-        translationString = chineseUtils.toDBC(translationString);
-        lang.setLang(translationString);
+        if (chineseString != null) {
+            String translationString = chineseString.getTrans_result().get(0).getDst();
+            //去空格
+            translationString = translationString.replace(" ", "");
+            //标点符号转小写
+            translationString = chineseUtils.toDBC(translationString);
+            lang.setLang(translationString);
+            log.info("{}", translationString);
+        }
         lang.setIsChinese(true);
-        log.info("{}", translationString);
     }
 
     /**

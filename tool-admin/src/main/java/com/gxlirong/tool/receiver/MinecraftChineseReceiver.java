@@ -2,10 +2,12 @@ package com.gxlirong.tool.receiver;
 
 import com.gxlirong.tool.common.api.ResultCode;
 import com.gxlirong.tool.common.exception.OperationException;
+import com.gxlirong.tool.entity.ToolCommonFile;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
 import com.gxlirong.tool.entity.ToolMinecraftModLang;
 import com.gxlirong.tool.enums.LogEnum;
 import com.gxlirong.tool.enums.ToolMinecraftModChineseEnum;
+import com.gxlirong.tool.service.ToolCommonFileService;
 import com.gxlirong.tool.service.ToolCommonLogService;
 import com.gxlirong.tool.service.ToolMinecraftModLangService;
 import com.gxlirong.tool.service.ToolMinecraftModService;
@@ -32,6 +34,10 @@ public class MinecraftChineseReceiver {
     private ToolMinecraftModLangService minecraftModLangService;
     @Autowired
     private ToolCommonLogService logService;
+    @Autowired
+    private ToolCommonFileService commonFileService;
+    @Autowired
+    private ToolCommonFileService fileService;
 
     @RabbitHandler
     public void handle(Long minecraftModId) {
@@ -41,7 +47,7 @@ public class MinecraftChineseReceiver {
             minecraftMod = minecraftModService.findById(minecraftModId);
             //获得未汉化的字段
             List<ToolMinecraftModLang> notChineseList = minecraftModLangService.getNotChineseList(minecraftMod.getId());
-            if (notChineseList != null) {
+            if (notChineseList != null && !notChineseList.isEmpty()) {
                 for (ToolMinecraftModLang notChinese : notChineseList) {
                     minecraftModLangService.chineseLang(notChinese);
                     if (!minecraftModLangService.updateById(notChinese)) {
@@ -52,6 +58,14 @@ public class MinecraftChineseReceiver {
             }
             minecraftMod.setChineseStatus(ToolMinecraftModChineseEnum.CHINESE_STATUS.getChineseComplete());
             minecraftModService.updateById(minecraftMod);
+            //汉化文件写入
+            ToolCommonFile file = fileService.findByToolMinecraftModPermanent(minecraftMod);
+            if (file == null) {
+                throw new RuntimeException();
+            }
+            commonFileService.minecraftModPackageEnLangFromChineseList(minecraftModLangService.getList(minecraftMod.getId()), file.getPath().substring(0, file.getPath().lastIndexOf(".")));
+            //重新打包
+            commonFileService.minecraftModPackageFromPath(commonFileService.findByToolMinecraftModPermanent(minecraftMod).getPath());
             log.error("我的世界汉化字段完成");
         } catch (Exception e) {
             try {

@@ -1,5 +1,6 @@
 package com.gxlirong.tool.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gxlirong.tool.domain.dto.MinecraftModFileInfo;
 import com.gxlirong.tool.entity.ToolMinecraftMod;
@@ -38,33 +39,20 @@ public class ToolMinecraftModInfoServiceImpl extends ServiceImpl<ToolMinecraftMo
     public boolean create(ToolMinecraftMod minecraftMod, String path) throws IOException {
         ArrayList<ToolMinecraftModInfo> minecraftModInfoList = new ArrayList<>();
 
-        List<MinecraftModFileInfo> minecraftModFileInfo = fileService.getMinecraftModFileInfo(path);
-        for (MinecraftModFileInfo minecraftModFile : minecraftModFileInfo) {
-            ToolMinecraftModInfo toolMinecraftModInfo = new ToolMinecraftModInfo();
-            toolMinecraftModInfo.setMinecraftModId(minecraftMod.getId());
-            toolMinecraftModInfo.setModid(minecraftModFile.getModid());
-            toolMinecraftModInfo.setName(minecraftModFile.getName());
-            toolMinecraftModInfo.setDescription(minecraftModFile.getDescription());
-            toolMinecraftModInfo.setVersion(minecraftModFile.getVersion());
-            toolMinecraftModInfo.setMcversion(minecraftModFile.getMcversion());
-            toolMinecraftModInfo.setUrl(minecraftModFile.getUrl());
-            toolMinecraftModInfo.setUpdateUrl(minecraftModFile.getUpdateUrl());
-            if (minecraftModFile.getAuthors() != null) {
-                toolMinecraftModInfo.setAuthorList(String.join(",", minecraftModFile.getAuthors()));
-            }
-            if (minecraftModFile.getAuthorList() != null) {
-                toolMinecraftModInfo.setAuthorList(String.join(",", minecraftModFile.getAuthorList()));
-            }
-            toolMinecraftModInfo.setCredits(minecraftModFile.getCredits());
-            toolMinecraftModInfo.setLogoFile(minecraftModFile.getLogoFile());
-            if (minecraftModFile.getScreenshots() != null) {
-                toolMinecraftModInfo.setScreenshots(String.join(",", minecraftModFile.getScreenshots()));
-            }
-            if (minecraftModFile.getScreenshots() != null) {
-                toolMinecraftModInfo.setDependencies(String.join(",", minecraftModFile.getDependencies()));
-            }
-            minecraftModInfoList.add(toolMinecraftModInfo);
-        }
+        MinecraftModFileInfo minecraftModFileInfo = fileService.getMinecraftModFileInfo(path);
+        ToolMinecraftModInfo toolMinecraftModInfo = new ToolMinecraftModInfo();
+        this.remove(new QueryWrapper<ToolMinecraftModInfo>().eq("minecraft_mod_id", minecraftMod.getId()));
+        toolMinecraftModInfo.setMinecraftModId(minecraftMod.getId());
+        toolMinecraftModInfo.setModId(minecraftModFileInfo.getModid().toLowerCase());
+        toolMinecraftModInfo.setName(minecraftModFileInfo.getName());
+        toolMinecraftModInfo.setDescription(minecraftModFileInfo.getDescription());
+        toolMinecraftModInfo.setVersion(minecraftModFileInfo.getVersion());
+        toolMinecraftModInfo.setMcVersion(minecraftModFileInfo.getMcversion());
+        toolMinecraftModInfo.setUrl(minecraftModFileInfo.getUrl());
+        toolMinecraftModInfo.setAuthorList(minecraftModFileInfo.getAuthorList());
+        toolMinecraftModInfo.setDependencies(minecraftModFileInfo.getDependencies());
+        minecraftModInfoList.add(toolMinecraftModInfo);
+
         return this.saveBatch(minecraftModInfoList);
     }
 }
